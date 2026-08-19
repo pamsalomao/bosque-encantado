@@ -3,112 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#78906f">
-  <meta name="description" content="Confirmação de presença — Bosque Encantado da Malu">
+  <meta name="theme-color" content="#efe9db">
   <title>Bosque Encantado da Malu</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Updock&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="book-shell">
+  <main class="site-shell">
     <div class="book" id="book">
 
-      <section class="page page-cover" id="pageCover">
-        <div class="decor decor-leaves" aria-hidden="true">🌿</div>
-        <div class="decor decor-mushroom" aria-hidden="true">🍄</div>
-        <div class="decor decor-butterfly" aria-hidden="true">🦋</div>
+      <section class="page page-one" aria-label="Convite Bosque Encantado da Malu">
+        <img class="invite-image" src="imagens/pagina1.jpg" alt="Convite Bosque Encantado da Malu">
+        <button id="openBook" class="page-one-hotspot" type="button"
+                aria-label="Confirme sua presença aqui"></button>
+      </section>
 
-        <div class="page-inner">
-          <p class="eyebrow">Um convite especial</p>
-          <h1>Bosque Encantado</h1>
-          <p class="subtitle">A Malu espera por você...</p>
-
-          <div class="story">
+      <section class="page page-two" id="pageTwo" aria-hidden="true">
+        <div class="page-two-content">
+          <div class="confirm-card">
+            <h1 class="updock">Você vem?</h1>
             <p>
-              Em um bosque cheio de magia, onde os animaizinhos vivem grandes aventuras,
-              os cogumelos escondem pequenos encantos e as borboletas dançam entre as flores,
-              um dia muito especial está prestes a acontecer.
+              Digite seu nome abaixo para confirmar sua presença no
+              Bosque Encantado da Malu.
             </p>
 
-            <p>
-              A Malu vai completar seu <strong>1º aninho</strong> e ficaria muito feliz
-              em compartilhar esse momento com você.
-            </p>
+            <form id="rsvpForm" action="https://script.google.com/macros/s/AKfycbyGTDZ2F5nMObMUIIZYVHmabqmh7gmTsfAKyaQumgGIoTa4FSbtm0IMfk48s6pIwZta/exec" method="POST" target="submitFrame">
+              <label for="guestName">Seu nome</label>
+              <input id="guestName" name="nome" type="text"
+                     maxlength="80" placeholder="Digite seu nome"
+                     autocomplete="name" required>
 
-            <p>Venha fazer parte dessa linda história. 💚</p>
+              <button id="confirmButton" class="confirm-button updock" type="submit">
+                Confirmar presença
+              </button>
+
+              <p id="statusMessage" class="status" aria-live="polite"></p>
+            </form>
+
+            <div id="successBox" class="success" hidden>
+              <h2 class="updock">Oba!</h2>
+              <p>Sua presença foi confirmada.</p>
+              <p class="updock success-final">A Malu espera por você! ♥</p>
+            </div>
+
+            <button id="backButton" class="back-button" type="button">← Voltar</button>
           </div>
-
-          <div class="event-card">
-            <div>
-              <span>Data</span>
-              <strong>31 de outubro de 2026</strong>
-            </div>
-            <div>
-              <span>Horário</span>
-              <strong>12h00</strong>
-            </div>
-            <div>
-              <span>Local</span>
-              <strong>Rua Primo Porcari, nº 51<br>Medeiros — Jundiaí/SP</strong>
-            </div>
-          </div>
-
-          <button class="primary-button" id="openBook" type="button">
-            <span>🍄</span> Entrar no Bosque
-          </button>
         </div>
       </section>
 
-      <section class="page page-rsvp" id="pageRsvp" aria-hidden="true">
-        <div class="decor decor-corner" aria-hidden="true">🌿</div>
-        <div class="decor decor-mushroom-small" aria-hidden="true">🍄</div>
-
-        <div class="page-inner">
-          <p class="eyebrow">Sua presença deixa a história completa</p>
-          <h2>Confirme sua presença</h2>
-
-          <form id="rsvpForm" action="https://script.google.com/macros/s/AKfycbyGTDZ2F5nMObMUIIZYVHmabqmh7gmTsfAKyaQumgGIoTa4FSbtm0IMfk48s6pIwZta/exec" method="POST" target="submitFrame">
-            <div class="field">
-              <label for="guestName">Nome</label>
-              <input
-                id="guestName"
-                name="nome"
-                type="text"
-                maxlength="80"
-                placeholder="Digite seu nome"
-                autocomplete="name"
-                required
-              >
-            </div>
-
-            <button class="primary-button" id="confirmButton" type="submit">
-              <span>🌿</span> Confirmar presença
-            </button>
-
-            <p id="statusMessage" class="status-message" aria-live="polite"></p>
-          </form>
-
-          <div class="success-message" id="successMessage" hidden>
-            <div class="success-icon" aria-hidden="true">🦋</div>
-            <h3>Presença confirmada!</h3>
-            <p>
-              A Malu ficou muito feliz em saber que você estará conosco
-              nesse dia tão especial.
-            </p>
-            <p>Nos vemos no Bosque Encantado! 💚</p>
-          </div>
-
-          <p class="back-link">
-            <button type="button" id="backButton">← Voltar</button>
-          </p>
-        </div>
-      </section>
     </div>
   </main>
 
-  <iframe name="submitFrame" id="submitFrame" title="Envio da confirmação" hidden></iframe>
+  <iframe name="submitFrame" title="Envio da confirmação" hidden></iframe>
   <script src="script.js"></script>
 </body>
 </html>
