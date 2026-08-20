@@ -13,19 +13,18 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <main class="app">
     <div class="ambient" id="ambient"></div>
 
     <div class="book-stage">
       <div class="book" id="book">
 
-        <!-- PÁGINA 2: fica sempre pronta por baixo da primeira -->
+        <!-- Página 2 já fica pronta por baixo da Página 1 -->
         <section class="page page-two" id="pageTwo" aria-hidden="true">
           <div class="page-surface">
             <img class="bg-art" src="imagens/pagina2.png" alt="" aria-hidden="true">
 
-            <div class="page-two-ui">
+            <div class="page-two-ui safe-column">
               <h1 class="script p2-title">Você vem?</h1>
 
               <p class="body p2-copy">
@@ -60,7 +59,7 @@
               <div id="successMessage" class="success-card" hidden>
                 <h2 class="script">Oba!</h2>
                 <p class="body">Sua presença foi confirmada.</p>
-                <p class="script success-last">A Malu espera por você! ♥</p>
+                <p class="script success-last">A Malu espera por você!</p>
 
                 <button id="okButton" class="script ok-button" type="button">
                   Ok
@@ -70,7 +69,7 @@
           </div>
         </section>
 
-        <!-- PÁGINA 1 -->
+        <!-- Página 1 -->
         <section class="page page-one" id="pageOne">
           <div class="turning-page" id="turningPage">
 
@@ -78,11 +77,13 @@
               <div class="page-surface">
                 <img class="bg-art" src="imagens/pagina1.png" alt="" aria-hidden="true">
 
-                <div class="page-one-ui">
+                <div class="page-one-ui safe-column">
                   <h1 class="script once">Era uma vez...</h1>
                   <h2 class="script subtitle">O Bosque Encantado da Malu!</h2>
 
-                  <div class="ornament"><span></span><b>♥</b><span></span></div>
+                  <div class="ornament" aria-hidden="true">
+                    <span></span><b>♥</b><span></span>
+                  </div>
 
                   <p class="body intro">
                     A Malu vai completar seu <strong>1º aninho</strong><br>
@@ -97,20 +98,20 @@
                     <p><strong>Local:</strong> Rua Primo Porcari, 51 - Medeiros/Jundiaí</p>
                   </div>
 
-                  <div class="ornament small"><span></span><b>♥</b><span></span></div>
+                  <div class="ornament small" aria-hidden="true">
+                    <span></span><b>♥</b><span></span>
+                  </div>
 
                   <button id="turnPageButton" class="script primary-button p1-button" type="button">
                     Confirme sua presença aqui
                   </button>
                 </div>
 
-                <!-- pontinha da folha que “pega” primeiro -->
                 <div class="peel-corner" aria-hidden="true">
                   <div class="peel-paper"></div>
                   <div class="peel-shadow"></div>
                 </div>
 
-                <!-- sombra que atravessa a página durante a virada -->
                 <div class="sweep-shadow" aria-hidden="true"></div>
               </div>
             </div>
