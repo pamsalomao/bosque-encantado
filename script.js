@@ -1,7 +1,6 @@
 const book = document.getElementById("book");
 const ambient = document.getElementById("ambient");
 const pageTwo = document.getElementById("pageTwo");
-const flipPage = document.getElementById("flipPage");
 
 const turnPageButton = document.getElementById("turnPageButton");
 const backButton = document.getElementById("backButton");
@@ -13,82 +12,77 @@ const statusMessage = document.getElementById("statusMessage");
 const successMessage = document.getElementById("successMessage");
 const submitFrame = document.getElementById("submitFrame");
 
-let isAnimating = false;
-let submitState = "idle";
+let animationLocked = false;
+let submissionState = "idle";
 
-function openSecondPage() {
-  if (isAnimating || book.classList.contains("open")) return;
-
-  isAnimating = true;
-  submitState = "idle";
-
-  // Sempre entra na página 2 com o formulário visível.
+function resetPageTwo() {
+  submissionState = "idle";
   form.hidden = false;
   successMessage.hidden = true;
   statusMessage.textContent = "";
+  guestName.value = "";
   confirmButton.disabled = false;
+}
 
-  // 1) levanta a pontinha
-  book.classList.add("corner-lift");
+function openPageTwo() {
+  if (animationLocked || book.classList.contains("open")) return;
 
-  // 2) depois começa a virada da folha
+  animationLocked = true;
+  resetPageTwo();
+
+  /* levanta a pontinha */
+  book.classList.add("peeling");
+
+  /* inicia a virada logo depois */
   setTimeout(() => {
     book.classList.add("turning");
     pageTwo.setAttribute("aria-hidden", "false");
-  }, 240);
+  }, 170);
 
-  // 3) fixa o estado final
+  /* fixa no estado aberto */
   setTimeout(() => {
-    book.classList.remove("corner-lift", "turning");
+    book.classList.remove("peeling", "turning");
     book.classList.add("open");
     ambient.style.backgroundImage = 'url("imagens/pagina2.png")';
-    isAnimating = false;
-  }, 1390);
+    animationLocked = false;
+  }, 1090);
 }
 
-function backToFirstPage() {
-  if (isAnimating || !book.classList.contains("open")) return;
+function backToPageOne() {
+  if (animationLocked || !book.classList.contains("open")) return;
 
-  isAnimating = true;
+  animationLocked = true;
+  resetPageTwo();
 
-  // Esconde qualquer mensagem antes de voltar.
-  submitState = "idle";
-  form.hidden = false;
-  successMessage.hidden = true;
-  statusMessage.textContent = "";
-  confirmButton.disabled = false;
-  guestName.value = "";
+  /*
+    Volta de forma suave sem Web Animations pesado:
+    usa transição CSS temporária só em transform.
+  */
+  const turningPage = document.getElementById("turningPage");
 
-  // Retira o estado fixo e anima de volta.
   book.classList.remove("open");
 
-  const animation = flipPage.animate(
-    [
-      { transform: "rotateY(-180deg) translateZ(0)" },
-      { transform: "rotateY(-150deg) translateZ(20px)", offset: .20 },
-      { transform: "rotateY(-108deg) translateZ(42px)", offset: .43 },
-      { transform: "rotateY(-64deg) translateZ(46px)", offset: .64 },
-      { transform: "rotateY(-25deg) translateZ(25px)", offset: .82 },
-      { transform: "rotateY(0deg) translateZ(0)" }
-    ],
-    {
-      duration: 1050,
-      easing: "cubic-bezier(.55,.02,.24,.99)",
-      fill: "both"
-    }
-  );
+  turningPage.style.transition = "transform .82s cubic-bezier(.42,.02,.20,1)";
+  turningPage.style.transform = "rotateY(-180deg)";
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      turningPage.style.transform = "rotateY(0deg)";
+    });
+  });
 
   ambient.style.backgroundImage = 'url("imagens/pagina1.png")';
 
-  animation.finished.finally(() => {
-    animation.cancel();
+  setTimeout(() => {
+    turningPage.style.transition = "";
+    turningPage.style.transform = "";
     pageTwo.setAttribute("aria-hidden", "true");
-    isAnimating = false;
-  });
+    animationLocked = false;
+  }, 850);
 }
 
-turnPageButton.addEventListener("click", openSecondPage);
-backButton.addEventListener("click", backToFirstPage);
+turnPageButton.addEventListener("click", openPageTwo);
+backButton.addEventListener("click", backToPageOne);
 
 form.addEventListener("submit", (event) => {
   const nome = guestName.value.trim();
@@ -100,24 +94,21 @@ form.addEventListener("submit", (event) => {
     return;
   }
 
-  submitState = "sending";
+  submissionState = "sending";
   statusMessage.textContent = "Enviando...";
   confirmButton.disabled = true;
 });
 
 /*
   O iframe carrega uma vez ao iniciar.
-  Só aceitamos o evento se um envio estiver em andamento.
-  Isso elimina o bug do “Oba!” aparecer ao abrir a página 2.
+  Só mostramos sucesso quando houve um envio real.
 */
 submitFrame.addEventListener("load", () => {
-  if (submitState !== "sending") return;
+  if (submissionState !== "sending") return;
 
-  submitState = "done";
-  confirmButton.disabled = false;
+  submissionState = "done";
   statusMessage.textContent = "";
-
+  confirmButton.disabled = false;
   form.hidden = true;
   successMessage.hidden = false;
-  guestName.value = "";
 });
