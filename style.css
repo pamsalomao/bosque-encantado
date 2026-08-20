@@ -2,6 +2,12 @@
   box-sizing: border-box;
 }
 
+:root {
+  --page-ratio: 947 / 2048;
+  --green: #2f5c22;
+  --cream: #fff7e7;
+}
+
 html,
 body {
   width: 100%;
@@ -9,167 +15,260 @@ body {
   margin: 0;
 }
 
+html {
+  background: #1d130c;
+}
+
 body {
   overflow: hidden;
-  background:
-    radial-gradient(circle at center, #3a291d 0%, #1d140e 72%, #100b07 100%);
+  overscroll-behavior: none;
   font-family: Arial, sans-serif;
 }
 
-/* A tela inteira vira o "palco" do livro.
-   Não há rolagem. */
-.viewport {
+button,
+input {
+  font: inherit;
+}
+
+/* =========================
+   TELA INTEIRA
+   ========================= */
+
+.app {
+  position: relative;
   width: 100vw;
   height: 100dvh;
   min-height: 100vh;
+  overflow: hidden;
+  background: #1d130c;
+  isolation: isolate;
+}
+
+/*
+  O fundo usa a própria arte em cover + blur.
+  A página da frente continua 100% inteira e nítida.
+  Assim não há barras pretas “vazias” nas laterais.
+*/
+.ambient-bg {
+  position: absolute;
+  inset: -24px;
+  z-index: -2;
+  background-image: url("imagens/pagina1.png");
+  background-position: center;
+  background-size: cover;
+  filter: blur(18px) brightness(.43) saturate(.8);
+  transform: scale(1.06);
+  transition: background-image .25s ease;
+}
+
+.ambient-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(22, 13, 7, .28);
+}
+
+/* =========================
+   LIVRO
+   ========================= */
+
+.book-stage {
+  position: absolute;
+  inset:
+    max(3px, env(safe-area-inset-top))
+    max(3px, env(safe-area-inset-right))
+    max(3px, env(safe-area-inset-bottom))
+    max(3px, env(safe-area-inset-left));
   display: grid;
   place-items: center;
-  overflow: hidden;
-  padding:
-    max(4px, env(safe-area-inset-top))
-    max(4px, env(safe-area-inset-right))
-    max(4px, env(safe-area-inset-bottom))
-    max(4px, env(safe-area-inset-left));
-  perspective: 2200px;
+  perspective: 2400px;
 }
 
 .book {
   position: relative;
-  width: 100%;
+
+  /*
+    Altura é a referência principal.
+    Como a arte é muito vertical, isso faz a página ocupar
+    toda a altura possível sem cortar nenhuma parte.
+  */
   height: 100%;
+  max-height: 100%;
+  aspect-ratio: var(--page-ratio);
+  max-width: 100%;
+
   transform-style: preserve-3d;
 }
 
 .page {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-}
-
-/* Cada sheet recebe a proporção exata da sua imagem.
-   max-width + max-height fazem a arte inteira caber na tela. */
-.sheet {
-  position: relative;
-  max-width: 100%;
-  max-height: 100%;
   transform-style: preserve-3d;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, .34));
 }
 
-.sheet img {
+.page-frame,
+.flip-sheet,
+.face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.page-frame,
+.flip-sheet {
+  /*
+    Mantém a página extremamente nítida:
+    nenhuma transformação permanente/escala artificial.
+  */
+  filter:
+    drop-shadow(0 10px 22px rgba(0,0,0,.32))
+    drop-shadow(0 1px 3px rgba(0,0,0,.28));
+}
+
+.art {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  image-rendering: auto;
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
 }
 
-.sheet-1 {
-  aspect-ratio: 1178 / 1335;
-  width: min(100%, calc(100dvh * 1178 / 1335));
-  height: min(100%, calc(100vw * 1335 / 1178));
-}
+/* =========================
+   PÁGINA 2
+   ========================= */
 
-.sheet-2 {
-  aspect-ratio: 1151 / 1366;
-  width: min(100%, calc(100dvh * 1151 / 1366));
-  height: min(100%, calc(100vw * 1366 / 1151));
-}
-
-/* Um pequeno relevo extra para reforçar o efeito de página física. */
-.sheet::before {
-  content: "";
-  position: absolute;
-  inset: 1.1% .6% 1.1% 1.2%;
-  border-radius: 2.4%;
+.page-two {
+  z-index: 1;
+  opacity: 0;
+  transform: translateZ(-2px);
   pointer-events: none;
-  box-shadow:
-    inset 13px 0 18px rgba(52, 26, 9, .14),
-    inset -5px 0 12px rgba(255, 247, 220, .10);
-  z-index: 3;
+  transition: opacity .18s ease .30s;
 }
 
-/* -------------------------
-   PÁGINA 1
-   ------------------------- */
+.book.open .page-two {
+  opacity: 1;
+  pointer-events: auto;
+}
 
-.page-1 {
+/* =========================
+   PÁGINA 1 / VIRADA
+   ========================= */
+
+.page-one {
   z-index: 3;
   pointer-events: auto;
 }
 
-.sheet-1 {
-  transform-origin: 2.5% 50%;
-  transition:
-    transform 1.15s cubic-bezier(.62, .03, .26, 1),
-    filter .9s ease;
+.flip-sheet {
+  transform-origin: 2.6% 50%;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
-/* sombra dinâmica enquanto a folha vira */
-.sheet-1::after {
-  content: "";
+.face {
+  overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.front {
+  transform: rotateY(0deg);
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+.paper-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 2.4%;
+  background:
+    linear-gradient(90deg, rgba(83,50,19,.18), transparent 11%),
+    radial-gradient(circle at 45% 30%, #fff8e8, #ead8b8 78%);
+  box-shadow:
+    inset 12px 0 20px rgba(74,45,19,.17),
+    inset -3px 0 8px rgba(255,255,255,.55);
+}
+
+/* sombra que atravessa a folha enquanto ela dobra */
+.turn-shadow {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  opacity: 0;
   background:
     linear-gradient(
       90deg,
-      rgba(20, 10, 4, .30) 0%,
-      rgba(20, 10, 4, .04) 18%,
-      transparent 48%,
-      rgba(255,255,255,.10) 72%,
-      rgba(20, 10, 4, .12) 100%
+      rgba(26,14,6,.38) 0%,
+      rgba(26,14,6,.07) 17%,
+      transparent 43%,
+      rgba(255,255,255,.13) 64%,
+      rgba(23,12,5,.23) 100%
     );
-  opacity: 0;
-  transition: opacity .55s ease;
-  z-index: 4;
+  mix-blend-mode: multiply;
 }
 
-.book.open .sheet-1 {
-  transform: rotateY(-178deg);
-  filter: drop-shadow(-18px 12px 28px rgba(0,0,0,.34));
+/*
+  Mais convincente do que um simples rotateY:
+  a folha começa quase plana, avança para o observador,
+  estreita no meio e só então fecha para a esquerda.
+*/
+.book.turning .flip-sheet {
+  animation: pageTurn 1.28s cubic-bezier(.58,.03,.26,.99) forwards;
 }
 
-.book.open .sheet-1::after {
-  opacity: 1;
+.book.turning .turn-shadow {
+  animation: shadowTurn 1.28s ease forwards;
 }
 
-.book.open .page-1 {
+.book.open .flip-sheet {
+  transform: rotateY(-180deg);
   pointer-events: none;
 }
 
-/* -------------------------
-   PÁGINA 2
-   ------------------------- */
-
-.page-2 {
-  z-index: 2;
-  opacity: 0;
-  transform: scale(.985);
-  transition:
-    opacity .28s ease .42s,
-    transform .45s ease .42s;
+@keyframes pageTurn {
+  0% {
+    transform: translateZ(0) rotateY(0deg) scaleX(1);
+  }
+  18% {
+    transform: translateZ(16px) rotateY(-16deg) scaleX(.997);
+  }
+  46% {
+    transform: translateZ(34px) rotateY(-72deg) scaleX(.965);
+  }
+  70% {
+    transform: translateZ(25px) rotateY(-127deg) scaleX(.974);
+  }
+  88% {
+    transform: translateZ(10px) rotateY(-166deg) scaleX(.994);
+  }
+  100% {
+    transform: translateZ(0) rotateY(-180deg) scaleX(1);
+  }
 }
 
-.book.open .page-2 {
-  opacity: 1;
-  transform: scale(1);
-  pointer-events: auto;
+@keyframes shadowTurn {
+  0%   { opacity: 0; }
+  22%  { opacity: .28; }
+  52%  { opacity: .66; }
+  78%  { opacity: .34; }
+  100% { opacity: 0; }
 }
 
-/* -------------------------
+/* =========================
    ÁREAS CLICÁVEIS
-   ------------------------- */
+   ========================= */
 
 .hotspot {
   position: absolute;
-  z-index: 10;
+  z-index: 20;
+  margin: 0;
+  padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
@@ -177,136 +276,163 @@ body {
 }
 
 .hotspot:focus-visible {
-  outline: 3px solid rgba(255,255,255,.92);
+  outline: 3px solid rgba(255,255,255,.95);
   outline-offset: 2px;
 }
 
-/* Posição do botão "Confirme sua presença aqui" na Página 1 */
-.page1-button {
-  left: 31.2%;
-  top: 70.7%;
-  width: 37.2%;
-  height: 7.1%;
+/* Página 1: botão desenhado */
+.page-one-hotspot {
+  left: 25.1%;
+  top: 67.3%;
+  width: 50.5%;
+  height: 6.0%;
   border-radius: 999px;
 }
 
-/* -------------------------
-   CAMPO REAL DA PÁGINA 2
-   ------------------------- */
+/* =========================
+   PÁGINA 2 FUNCIONAL
+   ========================= */
 
-/* Coordenadas relativas à arte para se adaptar a qualquer celular. */
+/*
+  Coordenadas tiradas diretamente da nova arte 947 × 2048.
+  Tudo é percentual, então funciona em qualquer tamanho de celular.
+*/
+
 .name-input {
   position: absolute;
-  z-index: 12;
-  left: 27.3%;
-  top: 46.2%;
-  width: 49.7%;
-  height: 6.1%;
-  margin: 0;
-  padding: 0 2.2%;
-  border: 2px solid #4d6539;
-  border-radius: 16px;
-  outline: none;
-  background: rgba(255, 250, 239, .97);
-  color: #555;
-  font-size: clamp(12px, 2.15vh, 21px);
-}
+  z-index: 21;
 
-.name-input:focus {
-  box-shadow: 0 0 0 3px rgba(81, 104, 58, .20);
+  left: 19.6%;
+  top: 49.7%;
+  width: 60.4%;
+  height: 5.0%;
+
+  margin: 0;
+  padding: 0 3.2%;
+  border: 2px solid #315821;
+  border-radius: 13px;
+  outline: none;
+
+  background: rgba(255, 250, 239, .97);
+  color: #6b6b6b;
+
+  /*
+    16px mínimo evita o Safari dar zoom automático ao focar.
+  */
+  font-size: max(16px, 1.92vh);
+  line-height: 1;
 }
 
 .name-input::placeholder {
-  color: #888;
+  color: #8b8b8b;
+  opacity: 1;
 }
 
-/* Posição do botão "Confirmar presença" na Página 2 */
-.page2-confirm {
-  left: 27.2%;
-  top: 54.1%;
-  width: 49.8%;
-  height: 6.3%;
+.name-input:focus {
+  box-shadow: 0 0 0 3px rgba(49,88,33,.15);
+}
+
+.confirm-hotspot {
+  left: 24.0%;
+  top: 57.35%;
+  width: 52.0%;
+  height: 5.2%;
   border-radius: 999px;
 }
 
-/* Posição do “Voltar” */
-.page2-back {
-  left: 43%;
-  top: 64.1%;
-  width: 14%;
-  height: 4.2%;
+.back-hotspot {
+  left: 40.8%;
+  top: 68.1%;
+  width: 18.4%;
+  height: 3.2%;
 }
 
-/* -------------------------
-   FEEDBACK
-   ------------------------- */
+/* =========================
+   STATUS DO ENVIO
+   ========================= */
 
-.feedback {
+.sending {
   position: absolute;
-  z-index: 20;
+  z-index: 40;
   left: 50%;
-  top: 62%;
+  top: 64%;
   transform: translateX(-50%);
-  padding: 8px 14px;
+  padding: 7px 13px;
   border-radius: 999px;
-  background: rgba(255, 248, 232, .94);
-  color: #43552f;
-  font-size: clamp(11px, 1.8vh, 16px);
+  background: rgba(255,248,232,.97);
+  color: #355426;
+  font-size: max(12px, 1.55vh);
   font-weight: 700;
-  box-shadow: 0 5px 15px rgba(0,0,0,.12);
+  box-shadow: 0 5px 15px rgba(0,0,0,.14);
 }
 
-.success-panel {
+/*
+  Começa SEMPRE oculto pelo atributo hidden.
+  Só o JavaScript remove hidden após um envio real.
+*/
+.success {
   position: absolute;
-  z-index: 30;
-  left: 24%;
-  top: 36%;
-  width: 52%;
-  padding: 4% 4%;
+  z-index: 50;
+  left: 20%;
+  top: 43%;
+  width: 60%;
+  padding: 5% 4%;
+
   display: grid;
-  gap: 8px;
+  gap: 7px;
   text-align: center;
-  border: 2px solid rgba(76, 99, 54, .75);
+
+  border: 2px solid rgba(49,88,33,.78);
   border-radius: 18px;
-  background: rgba(255, 248, 232, .97);
-  color: #43552f;
-  box-shadow: 0 10px 28px rgba(0,0,0,.20);
+
+  background: rgba(255,248,232,.985);
+  color: #315821;
+  box-shadow: 0 10px 30px rgba(0,0,0,.20);
 }
 
-.success-panel strong {
+.success strong {
   font-family: Georgia, serif;
-  font-size: clamp(24px, 5.4vh, 46px);
+  font-size: max(28px, 5vh);
 }
 
-.success-panel span {
-  font-size: clamp(12px, 2vh, 18px);
+.success span {
+  font-size: max(13px, 1.8vh);
 }
 
-.success-panel small {
-  color: #8d1c1c;
-  font-size: clamp(12px, 2vh, 18px);
+.success small {
+  color: #981b21;
+  font-size: max(13px, 1.8vh);
 }
 
-/* -------------------------
-   TELAS MUITO ESTREITAS
-   ------------------------- */
+[hidden] {
+  display: none !important;
+}
 
-@media (max-aspect-ratio: 3 / 5) {
-  .viewport {
-    padding-left: 2px;
-    padding-right: 2px;
+/* =========================
+   CELULARES MAIS LARGOS
+   ========================= */
+
+/*
+  A página continua inteira.
+  O fundo desfocado ocupa o que sobra lateralmente.
+*/
+@media (min-aspect-ratio: 9 / 16) {
+  .book {
+    height: 100%;
+    width: auto;
   }
-
-  .name-input {
-    border-width: 1.5px;
-    border-radius: 11px;
-  }
 }
 
-/* Acessibilidade: quem reduz movimentos vê uma troca simples. */
+/* =========================
+   REDUÇÃO DE MOVIMENTO
+   ========================= */
+
 @media (prefers-reduced-motion: reduce) {
-  .sheet-1,
-  .page-2 {
-    transition-duration: .01ms !important;
+  .book.turning .flip-sheet {
+    animation-duration: .18s;
+  }
+
+  .book.turning .turn-shadow {
+    animation-duration: .18s;
   }
 }
