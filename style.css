@@ -60,6 +60,8 @@ button,input{font:inherit}
   max-width:100%;
   aspect-ratio:var(--ratio);
   transform-style:preserve-3d;
+  container-type:size;
+  container-name:invitebook;
 }
 
 @media (min-aspect-ratio:941/1672){
@@ -130,83 +132,160 @@ button,input{font:inherit}
   will-change:transform;
 }
 
+/*
+  V9: a Página 1 passa a usar um layout "travado".
+  Cada bloco tem sua própria posição absoluta dentro da área clara.
+  Assim uma fonte não empurra a outra no Safari/Chrome.
+*/
 .page-one-ui{
   position:absolute;
   z-index:5;
-  top:31.8%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
+
+  /* coluna segura no miolo claro do fundo */
+  left:19.5%;
+  right:19.5%;
+  top:31.0%;
+  height:34.2%;
+
   color:var(--ink);
+  text-align:center;
 }
 
-.once{
+/* Cada item tem uma caixa própria. */
+.once,
+.subtitle,
+.intro,
+.invitation,
+.details,
+.page-one-ui .ornament,
+.page-one-ui .ornament.small,
+.p1-button{
+  position:absolute;
+  left:0;
+  right:0;
   margin:0;
-  color:var(--green);
-  font-size:clamp(2.30rem,5.78vh,4.15rem);
-  line-height:.74;
-  font-weight:400;
 }
 
-.subtitle{
-  margin:1.05vh 0 0;
-  color:var(--green);
-  font-size:clamp(1.12rem,2.68vh,1.95rem);
-  line-height:.84;
-  font-weight:400;
-}
-
-.ornament{
-  width:30%;
-  margin:.75vh 0 .9vh;
+/* "Era uma vez..." */
+.once{
+  top:0%;
+  height:14.5%;
   display:flex;
   align-items:center;
   justify-content:center;
+
   color:var(--green);
+  font-size:5.45cqh;
+  line-height:.78;
+  font-weight:400;
+  white-space:nowrap;
 }
 
-.ornament span{
+/*
+  Subtítulo tem uma faixa separada.
+  O espaço entre 14.5% e 17.5% é intencional para o Z nunca encostar no M.
+*/
+.subtitle{
+  top:17.5%;
+  height:8.8%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:var(--green);
+  font-size:2.38cqh;
+  line-height:.88;
+  font-weight:400;
+  white-space:nowrap;
+}
+
+/* Divisória: somente linha verde, sem coração/emoji. */
+.page-one-ui .ornament{
+  top:28.6%;
+  left:34%;
+  right:34%;
   height:1px;
-  width:100%;
-  background:currentColor;
-  opacity:.55;
+  display:block;
+  background:var(--green);
+  opacity:.48;
 }
 
-.ornament b{
+.page-one-ui .ornament span{
   display:none;
 }
 
-.ornament.small{
-  width:28%;
-  margin:.75vh 0 .55vh;
+.page-one-ui .ornament b{
+  display:none;
 }
 
+/* Texto principal */
 .intro{
-  margin:0;
-  max-width:100%;
-  color:#232421;
-  font-size:clamp(.61rem,1.36vh,.82rem);
-  line-height:1.40;
-}
-.intro strong{color:var(--green-dark);font-weight:700}
+  top:33.0%;
+  height:20%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-.invitation{
-  margin:.95vh 0 .9vh;
-  color:var(--green);
-  font-size:clamp(1.28rem,3.0vh,2.1rem);
-  line-height:.84;
-}
-
-.details{
-  width:100%;
   color:#232421;
-  font-size:clamp(.52rem,1.16vh,.72rem);
+  font-size:1.32cqh;
   line-height:1.42;
 }
-.details p{margin:.08rem 0}
-.details strong{color:var(--green-dark);font-weight:700}
 
+.intro strong{
+  color:var(--green-dark);
+  font-weight:700;
+}
+
+/* Frase manuscrita */
+.invitation{
+  top:55.5%;
+  height:10%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:var(--green);
+  font-size:2.48cqh;
+  line-height:.88;
+  white-space:nowrap;
+}
+
+/* Data e local */
+.details{
+  top:67.0%;
+  height:10.8%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+
+  color:#232421;
+  font-size:1.08cqh;
+  line-height:1.38;
+  white-space:nowrap;
+}
+
+.details p{
+  margin:.05em 0;
+}
+
+.details strong{
+  color:var(--green-dark);
+  font-weight:700;
+}
+
+/* Segunda divisória: linha simples, sem coração. */
+.page-one-ui .ornament.small{
+  top:80.0%;
+  left:37%;
+  right:37%;
+  height:1px;
+  display:block;
+  background:var(--green);
+  opacity:.48;
+}
+
+/* Base comum dos botões */
 .primary-button{
   border:0;
   color:#fffdf7;
@@ -216,19 +295,51 @@ button,input{font:inherit}
   cursor:pointer;
 }
 
+/*
+  Botão da Página 1:
+  - menor;
+  - mais para baixo;
+  - caixa com altura fixa;
+  - overflow escondido;
+  - span centralizado e preso dentro da área interna.
+*/
 .p1-button{
-  width:min(58%,250px);
-  min-height:4.05vh;
-  margin-top:.55vh;
-  padding:.28vh .55rem .52vh;
+  top:84.3%;
+  left:18%;
+  right:18%;
+  width:auto;
+  height:12.0%;
+  min-height:0;
+  padding:0 .55rem;
+
   border-radius:999px;
-  font-size:clamp(1.00rem,2.50vh,1.68rem);
-  line-height:1;
-  white-space:nowrap;
+  overflow:hidden;
+
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
+}
+
+.p1-button span{
+  display:block;
+  width:100%;
+  max-width:100%;
+  overflow:hidden;
+
+  color:#fffdf7;
+  font-family:"Updock",cursive;
+  font-size:2.05cqh;
+  line-height:1;
+  white-space:nowrap;
+  text-align:center;
+
+  /*
+    Pequena compressão horizontal torna a frase robusta mesmo se
+    Safari e Chrome calcularem a fonte alguns pixels diferente.
+  */
+  transform:scaleX(.92);
+  transform-origin:center center;
 }
 
 /* ============ PONTINHA / VIRADA ============ */
