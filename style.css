@@ -28,7 +28,6 @@ button,input{font:inherit}
   background:#21150d;
 }
 
-/* Fundo da própria arte para preencher pequenas sobras laterais */
 .ambient{
   position:absolute;
   inset:-20px;
@@ -36,7 +35,7 @@ button,input{font:inherit}
   background:url("imagens/pagina1.png") center/cover no-repeat;
   filter:blur(16px) brightness(.48);
   transform:scale(1.05);
-  transition:background-image .18s ease;
+  transition:background-image .12s ease;
 }
 .ambient::after{
   content:"";
@@ -76,7 +75,6 @@ button,input{font:inherit}
   width:100%;
   height:100%;
 }
-
 .page{transform-style:preserve-3d}
 
 .page-surface{
@@ -100,7 +98,6 @@ button,input{font:inherit}
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
 }
-
 .page-front{transform:rotateY(0deg)}
 .page-back{transform:rotateY(180deg)}
 
@@ -113,16 +110,19 @@ button,input{font:inherit}
   box-shadow:inset 10px 0 18px rgba(70,41,18,.15);
 }
 
+/* Coluna segura central: evita invadir as árvores/folhas em qualquer celular */
+.safe-column{
+  left:17.5%;
+  right:17.5%;
+}
+
 /* ============ PÁGINA 1 ============ */
 
 .page-one{
   z-index:3;
   pointer-events:auto;
 }
-
-.book.open .page-one{
-  pointer-events:none;
-}
+.book.open .page-one{pointer-events:none}
 
 .turning-page{
   transform-origin:0% 50%;
@@ -133,9 +133,7 @@ button,input{font:inherit}
 .page-one-ui{
   position:absolute;
   z-index:5;
-  left:13.5%;
-  right:13.5%;
-  top:30.4%;
+  top:31.3%;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -146,59 +144,70 @@ button,input{font:inherit}
 .once{
   margin:0;
   color:var(--green);
-  font-size:clamp(2.8rem,7.25vh,5.1rem);
+  font-size:clamp(2.65rem,6.7vh,4.8rem);
   line-height:.74;
   font-weight:400;
 }
 
 .subtitle{
-  margin:.55vh 0 0;
+  margin:.45vh 0 0;
   color:var(--green);
-  font-size:clamp(1.45rem,3.45vh,2.45rem);
+  font-size:clamp(1.30rem,3.15vh,2.25rem);
   line-height:.84;
   font-weight:400;
 }
 
 .ornament{
-  width:36%;
-  margin:1.05vh 0 1.25vh;
+  width:34%;
+  margin:.9vh 0 1.05vh;
   display:flex;
   align-items:center;
-  gap:.55rem;
+  gap:.45rem;
   color:var(--green);
 }
+
 .ornament span{
   height:1px;
   flex:1;
   background:currentColor;
-  opacity:.5;
+  opacity:.55;
 }
-.ornament b{font-size:.75rem;font-weight:400}
-.ornament.small{width:32%;margin:1.1vh 0 1.15vh}
+
+.ornament b{
+  font-size:.62rem;
+  line-height:1;
+  font-weight:400;
+  color:var(--green);
+}
+
+.ornament.small{
+  width:30%;
+  margin:.9vh 0 .95vh;
+}
 
 .intro{
   margin:0;
   max-width:100%;
   color:#232421;
-  font-size:clamp(.69rem,1.62vh,.96rem);
-  line-height:1.46;
+  font-size:clamp(.66rem,1.50vh,.90rem);
+  line-height:1.43;
 }
 .intro strong{color:var(--green-dark);font-weight:700}
 
 .invitation{
-  margin:1.35vh 0 1.25vh;
+  margin:1.10vh 0 1.05vh;
   color:var(--green);
-  font-size:clamp(1.55rem,3.75vh,2.65rem);
+  font-size:clamp(1.42rem,3.35vh,2.35rem);
   line-height:.84;
 }
 
 .details{
   width:100%;
   color:#232421;
-  font-size:clamp(.59rem,1.40vh,.84rem);
-  line-height:1.46;
+  font-size:clamp(.56rem,1.28vh,.78rem);
+  line-height:1.42;
 }
-.details p{margin:.1rem 0}
+.details p{margin:.08rem 0}
 .details strong{color:var(--green-dark);font-weight:700}
 
 .primary-button{
@@ -211,21 +220,17 @@ button,input{font:inherit}
 }
 
 .p1-button{
-  width:min(76%,390px);
-  min-height:5.1vh;
-  padding:.45vh 1rem .75vh;
+  width:min(74%,330px);
+  min-height:4.65vh;
+  padding:.38vh .8rem .63vh;
   border-radius:999px;
-  font-size:clamp(1.45rem,3.72vh,2.55rem);
+  font-size:clamp(1.28rem,3.25vh,2.15rem);
   line-height:.78;
   white-space:nowrap;
 }
 
-/* ============ VIRADA PELA PONTINHA ============ */
+/* ============ PONTINHA / VIRADA ============ */
 
-/*
-  A pontinha é maior do que antes e nasce exatamente no canto inferior direito.
-  Primeiro ela dobra; depois a folha inteira acompanha.
-*/
 .peel-corner{
   position:absolute;
   right:0;
@@ -244,8 +249,7 @@ button,input{font:inherit}
   width:100%;
   height:100%;
   clip-path:polygon(100% 0,100% 100%,0 100%);
-  background:
-    linear-gradient(135deg,#fffbed 0%,#efd9aa 48%,#bd8b50 100%);
+  background:linear-gradient(135deg,#fffbed 0%,#efd9aa 48%,#bd8b50 100%);
   box-shadow:-7px -6px 14px rgba(56,33,14,.18);
   transform-origin:100% 100%;
 }
@@ -280,64 +284,38 @@ button,input{font:inherit}
     );
 }
 
-/*
-  Fase 1: a pontinha levanta.
-*/
 .book.peeling .peel-paper{
-  animation:peelTip .26s cubic-bezier(.2,.7,.2,1) forwards;
+  animation:peelTip .16s cubic-bezier(.2,.7,.2,1) forwards;
 }
 .book.peeling .peel-shadow{
-  animation:peelTipShadow .26s ease-out forwards;
+  animation:peelTipShadow .16s ease-out forwards;
 }
 
 @keyframes peelTip{
   0%{transform:rotate(0deg) scale(1)}
-  45%{transform:rotate(-13deg) scale(1.13) translate(-2%,-2%)}
-  100%{transform:rotate(-28deg) scale(1.42) translate(-7%,-7%)}
+  100%{transform:rotate(-28deg) scale(1.38) translate(-6%,-6%)}
 }
-
 @keyframes peelTipShadow{
   0%{opacity:.35;transform:translate(-3px,-3px) scale(1)}
-  100%{opacity:.95;transform:translate(-13px,-13px) scale(1.28)}
+  100%{opacity:.90;transform:translate(-12px,-12px) scale(1.24)}
 }
 
-/*
-  Fase 2: virada da folha.
-  Só transform/opacity para ficar mais fluido no Safari.
-*/
+/* mesma animação que você aprovou, só mais rápida */
 .book.turning .turning-page{
-  animation:classicFlip .98s cubic-bezier(.44,.01,.20,1) forwards;
+  animation:classicFlip .68s cubic-bezier(.44,.01,.20,1) forwards;
 }
 .book.turning .sweep-shadow{
-  animation:sweep .98s ease forwards;
+  animation:sweep .68s ease forwards;
 }
 
-/*
-  O primeiro trecho ainda parece estar sendo puxado pelo canto.
-  A maior rotação só acontece depois que a pontinha já levantou.
-*/
 @keyframes classicFlip{
-  0%{
-    transform:rotateY(0deg) translateZ(0);
-  }
-  12%{
-    transform:rotateY(-8deg) translateZ(7px) rotateZ(-.25deg);
-  }
-  27%{
-    transform:rotateY(-29deg) translateZ(20px) rotateZ(-.6deg);
-  }
-  46%{
-    transform:rotateY(-72deg) translateZ(34px) rotateZ(-.9deg);
-  }
-  61%{
-    transform:rotateY(-108deg) translateZ(34px) rotateZ(-.75deg);
-  }
-  79%{
-    transform:rotateY(-151deg) translateZ(18px) rotateZ(-.35deg);
-  }
-  100%{
-    transform:rotateY(-180deg) translateZ(0) rotateZ(0deg);
-  }
+  0%{transform:rotateY(0deg) translateZ(0)}
+  12%{transform:rotateY(-8deg) translateZ(7px) rotateZ(-.25deg)}
+  27%{transform:rotateY(-29deg) translateZ(20px) rotateZ(-.6deg)}
+  46%{transform:rotateY(-72deg) translateZ(34px) rotateZ(-.9deg)}
+  61%{transform:rotateY(-108deg) translateZ(34px) rotateZ(-.75deg)}
+  79%{transform:rotateY(-151deg) translateZ(18px) rotateZ(-.35deg)}
+  100%{transform:rotateY(-180deg) translateZ(0) rotateZ(0deg)}
 }
 
 @keyframes sweep{
@@ -356,26 +334,21 @@ button,input{font:inherit}
 /* ============ PÁGINA 2 ============ */
 
 /*
-  Página 2 fica renderizada desde o início por baixo da Página 1.
-  Isso elimina a sensação de “demora para aparecer”.
+  Ela fica 100% renderizada desde o início e já aparece durante a própria virada.
+  Não há fade atrasado.
 */
 .page-two{
   z-index:1;
   opacity:1;
-  pointer-events:none;
   visibility:visible;
+  pointer-events:none;
 }
-
-.book.open .page-two{
-  pointer-events:auto;
-}
+.book.open .page-two{pointer-events:auto}
 
 .page-two-ui{
   position:absolute;
   z-index:6;
-  left:16%;
-  right:16%;
-  top:31.2%;
+  top:32.0%;
   text-align:center;
   color:var(--ink);
 }
@@ -383,26 +356,30 @@ button,input{font:inherit}
 .p2-title{
   margin:0;
   color:var(--green);
-  font-size:clamp(3rem,6.8vh,4.7rem);
+  font-size:clamp(2.85rem,6.2vh,4.35rem);
   line-height:.76;
   font-weight:400;
 }
 
 .p2-copy{
-  margin:1.25vh auto 2.2vh;
+  margin:1.05vh auto 2.0vh;
   max-width:100%;
   color:#3c4038;
-  font-size:clamp(.67rem,1.52vh,.91rem);
-  line-height:1.48;
+  font-size:clamp(.63rem,1.42vh,.86rem);
+  line-height:1.44;
 }
 
-#rsvpForm{width:100%;text-align:left}
+#rsvpForm{
+  width:100%;
+  text-align:left;
+}
 
 .field-label{
   display:block;
-  margin:0 0 .55vh;
+  margin:0 0 .50vh;
+  padding-left:1.5%;
   color:var(--green-dark);
-  font-size:clamp(.70rem,1.58vh,.93rem);
+  font-size:clamp(.68rem,1.48vh,.88rem);
   font-weight:700;
 }
 
@@ -410,7 +387,7 @@ button,input{font:inherit}
   position:relative;
   z-index:10;
   width:100%;
-  height:5.25vh;
+  height:5.05vh;
   min-height:44px;
   padding:0 4%;
   border:2px solid #416334;
@@ -433,46 +410,46 @@ button,input{font:inherit}
   position:relative;
   z-index:10;
   width:100%;
-  min-height:5.3vh;
-  margin-top:1.55vh;
+  min-height:5.1vh;
+  margin-top:1.45vh;
   border-radius:999px;
-  padding:.45vh .8rem .7vh;
-  font-size:clamp(1.5rem,3.65vh,2.45rem);
+  padding:.40vh .8rem .65vh;
+  font-size:clamp(1.42rem,3.35vh,2.25rem);
   line-height:.8;
   touch-action:manipulation;
 }
 
 .status{
-  min-height:1.7vh;
-  margin:.65vh 0 0;
+  min-height:1.5vh;
+  margin:.55vh 0 0;
   color:#8d2022;
   text-align:center;
-  font-size:clamp(.61rem,1.32vh,.78rem);
+  font-size:clamp(.60rem,1.25vh,.75rem);
 }
 
 .back-button{
   position:relative;
   z-index:10;
-  margin-top:2.2vh;
-  padding:.5rem 1rem;
+  margin-top:2.0vh;
+  padding:.45rem .9rem;
   border:0;
   background:transparent;
   color:var(--green-dark);
-  font-size:clamp(.67rem,1.48vh,.86rem);
+  font-size:clamp(.65rem,1.40vh,.82rem);
   font-weight:600;
   cursor:pointer;
   touch-action:manipulation;
 }
 
-/* ============ SUCESSO + OK ============ */
+/* ============ SUCESSO / OK ============ */
 
 .success-card{
   position:absolute;
   z-index:30;
-  left:3%;
-  right:3%;
-  top:5%;
-  padding:2.6vh 7% 2.2vh;
+  left:4%;
+  right:4%;
+  top:4%;
+  padding:2.5vh 7% 2.1vh;
   border:2px solid rgba(64,96,47,.62);
   border-radius:14px;
   background:rgba(255,248,232,.985);
@@ -483,32 +460,32 @@ button,input{font:inherit}
 
 .success-card h2{
   margin:0;
-  font-size:clamp(3rem,6.8vh,4.5rem);
+  font-size:clamp(2.9rem,6.4vh,4.25rem);
   line-height:.76;
   font-weight:400;
 }
 
 .success-card p{
-  margin:.8vh 0 0;
-  font-size:clamp(.72rem,1.55vh,.93rem);
+  margin:.75vh 0 0;
+  font-size:clamp(.69rem,1.46vh,.87rem);
 }
 
 .success-card .success-last{
   color:#942123;
-  font-size:clamp(1.45rem,3.55vh,2.3rem);
+  font-size:clamp(1.38rem,3.25vh,2.15rem);
   line-height:.85;
 }
 
 .ok-button{
-  margin-top:1.9vh;
-  min-width:42%;
-  padding:.55vh 1.8rem .8vh;
+  margin-top:1.65vh;
+  min-width:38%;
+  padding:.48vh 1.55rem .72vh;
   border:0;
   border-radius:999px;
   color:#fffdf7;
   background:linear-gradient(#51753b,#385929);
-  box-shadow:0 6px 14px rgba(54,77,38,.22);
-  font-size:clamp(1.45rem,3.5vh,2.2rem);
+  box-shadow:0 6px 14px rgba(54,77,38,.22),inset 0 0 0 1px rgba(255,255,255,.12);
+  font-size:clamp(1.25rem,3.0vh,1.95rem);
   line-height:.82;
   cursor:pointer;
   touch-action:manipulation;
@@ -523,8 +500,8 @@ input:focus-visible{
 }
 
 @media (prefers-reduced-motion:reduce){
-  .book.turning .turning-page{animation-duration:.18s}
-  .book.turning .sweep-shadow{animation-duration:.18s}
+  .book.turning .turning-page{animation-duration:.16s}
+  .book.turning .sweep-shadow{animation-duration:.16s}
   .book.peeling .peel-paper,
-  .book.peeling .peel-shadow{animation-duration:.08s}
+  .book.peeling .peel-shadow{animation-duration:.05s}
 }
