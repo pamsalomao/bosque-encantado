@@ -32,25 +32,21 @@ function openPageTwo() {
   animationLocked = true;
   resetPageTwo();
 
-  /*
-    1) A pontinha levanta.
-    2) Quase imediatamente a folha acompanha.
-    3) A página 2 já está renderizada por baixo, então não existe atraso visual.
-  */
+  // Página 2 já está pronta por baixo, sem qualquer fade de entrada.
+  pageTwo.setAttribute("aria-hidden", "false");
+
   book.classList.add("peeling");
 
   setTimeout(() => {
     book.classList.add("turning");
-    pageTwo.setAttribute("aria-hidden", "false");
-  }, 210);
+  }, 120);
 
   setTimeout(() => {
     book.classList.remove("peeling", "turning");
     book.classList.add("open");
-
     ambient.style.backgroundImage = 'url("imagens/pagina2.png")';
     animationLocked = false;
-  }, 1190);
+  }, 800);
 }
 
 function backToPageOne() {
@@ -61,11 +57,7 @@ function backToPageOne() {
 
   book.classList.remove("open");
 
-  /*
-    Volta simples e fluida.
-    O CSS principal não fica brigando com Web Animations.
-  */
-  turningPage.style.transition = "transform .78s cubic-bezier(.44,.01,.20,1)";
+  turningPage.style.transition = "transform .52s cubic-bezier(.44,.01,.20,1)";
   turningPage.style.transform = "rotateY(-180deg)";
 
   requestAnimationFrame(() => {
@@ -81,13 +73,12 @@ function backToPageOne() {
     turningPage.style.transform = "";
     pageTwo.setAttribute("aria-hidden", "true");
     animationLocked = false;
-  }, 820);
+  }, 560);
 }
 
 turnPageButton.addEventListener("click", openPageTwo);
 backButton.addEventListener("click", backToPageOne);
 
-/* O botão OK fecha a confirmação e volta para a primeira página. */
 okButton.addEventListener("click", () => {
   if (animationLocked) return;
   backToPageOne();
@@ -108,17 +99,12 @@ form.addEventListener("submit", (event) => {
   confirmButton.disabled = true;
 });
 
-/*
-  O iframe carrega ao inicializar e após o Apps Script responder.
-  Só mostramos sucesso quando houve envio real.
-*/
 submitFrame.addEventListener("load", () => {
   if (submissionState !== "sending") return;
 
   submissionState = "done";
   statusMessage.textContent = "";
   confirmButton.disabled = false;
-
   form.hidden = true;
   successMessage.hidden = false;
 });
