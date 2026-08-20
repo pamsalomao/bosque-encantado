@@ -144,15 +144,15 @@ button,input{font:inherit}
 .once{
   margin:0;
   color:var(--green);
-  font-size:clamp(2.45rem,6.15vh,4.4rem);
+  font-size:clamp(2.30rem,5.78vh,4.15rem);
   line-height:.74;
   font-weight:400;
 }
 
 .subtitle{
-  margin:.45vh 0 0;
+  margin:1.05vh 0 0;
   color:var(--green);
-  font-size:clamp(1.18rem,2.85vh,2.05rem);
+  font-size:clamp(1.12rem,2.68vh,1.95rem);
   line-height:.84;
   font-weight:400;
 }
@@ -179,7 +179,7 @@ button,input{font:inherit}
 
 .ornament.small{
   width:28%;
-  margin:.7vh 0 .8vh;
+  margin:.75vh 0 .55vh;
 }
 
 .intro{
@@ -217,13 +217,18 @@ button,input{font:inherit}
 }
 
 .p1-button{
-  width:min(66%,285px);
-  min-height:4.25vh;
-  padding:.32vh .7rem .56vh;
+  width:min(58%,250px);
+  min-height:4.05vh;
+  margin-top:.55vh;
+  padding:.28vh .55rem .52vh;
   border-radius:999px;
-  font-size:clamp(1.12rem,2.85vh,1.9rem);
-  line-height:.78;
+  font-size:clamp(1.00rem,2.50vh,1.68rem);
+  line-height:1;
   white-space:nowrap;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
 }
 
 /* ============ PONTINHA / VIRADA ============ */
