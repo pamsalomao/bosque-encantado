@@ -175,7 +175,7 @@ button,input{font:inherit}
   justify-content:center;
 
   color:var(--green);
-  font-size:5.45cqh;
+  font-size:6.35cqh;
   line-height:.78;
   font-weight:400;
   white-space:nowrap;
@@ -193,7 +193,7 @@ button,input{font:inherit}
   justify-content:center;
 
   color:var(--green);
-  font-size:2.38cqh;
+  font-size:2.95cqh;
   line-height:.88;
   font-weight:400;
   white-space:nowrap;
@@ -220,15 +220,19 @@ button,input{font:inherit}
 
 /* Texto principal */
 .intro{
-  top:33.0%;
-  height:20%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  top:32.6%;
+  height:20.8%;
 
   color:#232421;
-  font-size:1.32cqh;
-  line-height:1.42;
+  font-size:1.62cqh;
+  line-height:1.38;
+  text-align:center;
+  white-space:nowrap;
+}
+
+.intro .no-break{
+  white-space:nowrap;
+  display:inline;
 }
 
 .intro strong{
@@ -245,7 +249,7 @@ button,input{font:inherit}
   justify-content:center;
 
   color:var(--green);
-  font-size:2.48cqh;
+  font-size:2.82cqh;
   line-height:.88;
   white-space:nowrap;
 }
@@ -260,7 +264,7 @@ button,input{font:inherit}
   justify-content:center;
 
   color:#232421;
-  font-size:1.08cqh;
+  font-size:1.34cqh;
   line-height:1.38;
   white-space:nowrap;
 }
