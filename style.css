@@ -3,26 +3,24 @@
 }
 
 :root {
-  --page-ratio: 947 / 2048;
-  --green: #2f5c22;
-  --cream: #fff7e7;
+  --green: #3f602f;
+  --green-deep: #2f4b24;
+  --ink: #292a28;
+  --cream: #fff7e6;
+  --page-ratio: 941 / 1672;
 }
 
 html,
 body {
+  margin: 0;
   width: 100%;
   height: 100%;
-  margin: 0;
-}
-
-html {
-  background: #1d130c;
 }
 
 body {
   overflow: hidden;
   overscroll-behavior: none;
-  font-family: Arial, sans-serif;
+  background: #21140c;
 }
 
 button,
@@ -30,9 +28,13 @@ input {
   font: inherit;
 }
 
-/* =========================
-   TELA INTEIRA
-   ========================= */
+.script {
+  font-family: "Updock", cursive;
+}
+
+.body {
+  font-family: "Poppins", sans-serif;
+}
 
 .app {
   position: relative;
@@ -40,113 +42,373 @@ input {
   height: 100dvh;
   min-height: 100vh;
   overflow: hidden;
-  background: #1d130c;
   isolation: isolate;
+  background: #21140c;
 }
 
-/*
-  O fundo usa a própria arte em cover + blur.
-  A página da frente continua 100% inteira e nítida.
-  Assim não há barras pretas “vazias” nas laterais.
-*/
-.ambient-bg {
+/* fundo preenche as sobras sem cortar a página real */
+.ambient {
   position: absolute;
-  inset: -24px;
+  inset: -26px;
   z-index: -2;
-  background-image: url("imagens/pagina1.png");
   background-position: center;
   background-size: cover;
-  filter: blur(18px) brightness(.43) saturate(.8);
-  transform: scale(1.06);
+  filter: blur(20px) brightness(.42) saturate(.85);
+  transform: scale(1.08);
   transition: background-image .25s ease;
 }
 
-.ambient-bg::after {
+.ambient-one {
+  background-image: url("imagens/pagina1.png");
+}
+
+.ambient::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(22, 13, 7, .28);
+  background: rgba(27, 16, 8, .22);
 }
 
-/* =========================
-   LIVRO
-   ========================= */
-
-.book-stage {
+.book-shell {
   position: absolute;
   inset:
-    max(3px, env(safe-area-inset-top))
-    max(3px, env(safe-area-inset-right))
-    max(3px, env(safe-area-inset-bottom))
-    max(3px, env(safe-area-inset-left));
+    max(2px, env(safe-area-inset-top))
+    max(2px, env(safe-area-inset-right))
+    max(2px, env(safe-area-inset-bottom))
+    max(2px, env(safe-area-inset-left));
   display: grid;
   place-items: center;
-  perspective: 2400px;
+  perspective: 2600px;
 }
 
 .book {
   position: relative;
-
-  /*
-    Altura é a referência principal.
-    Como a arte é muito vertical, isso faz a página ocupar
-    toda a altura possível sem cortar nenhuma parte.
-  */
   height: 100%;
   max-height: 100%;
-  aspect-ratio: var(--page-ratio);
   max-width: 100%;
-
+  aspect-ratio: var(--page-ratio);
   transform-style: preserve-3d;
+}
+
+/* Mantém a página inteira visível.
+   Se a largura da tela limitar antes da altura, ajusta pela largura. */
+@media (min-aspect-ratio: 941 / 1672) {
+  .book {
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--page-ratio);
+  }
+}
+
+.page,
+.flip-page,
+.face,
+.page-surface {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .page {
-  position: absolute;
-  inset: 0;
   transform-style: preserve-3d;
 }
 
-.page-frame,
-.flip-sheet,
-.face {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.page-frame,
-.flip-sheet {
-  /*
-    Mantém a página extremamente nítida:
-    nenhuma transformação permanente/escala artificial.
-  */
+.page-surface {
+  overflow: hidden;
+  border-radius: 1.8%;
   filter:
-    drop-shadow(0 10px 22px rgba(0,0,0,.32))
-    drop-shadow(0 1px 3px rgba(0,0,0,.28));
+    drop-shadow(0 12px 24px rgba(0,0,0,.30))
+    drop-shadow(0 2px 4px rgba(0,0,0,.28));
 }
 
-.art {
+.background-art {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  image-rendering: auto;
+  object-fit: fill;
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
 }
 
-/* =========================
+.front-face,
+.back-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: visible;
+}
+
+.front-face {
+  transform: rotateY(0);
+}
+
+.back-face {
+  transform: rotateY(180deg);
+}
+
+.paper-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.8%;
+  background:
+    linear-gradient(90deg, rgba(75,43,16,.20), transparent 10%),
+    radial-gradient(circle at 50% 34%, #fff9e8 0%, #efdeb8 70%, #d8bd8a 100%);
+  box-shadow:
+    inset 13px 0 20px rgba(71,42,18,.16),
+    inset -4px 0 9px rgba(255,255,255,.52);
+}
+
+/* =====================================
+   PÁGINA 1
+   ===================================== */
+
+.page-one {
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.flip-page {
+  transform-style: preserve-3d;
+  transform-origin: 2.2% 50%;
+  will-change: transform;
+}
+
+.page-one-content {
+  position: absolute;
+  z-index: 5;
+  left: 12.7%;
+  right: 12.7%;
+  top: 25.3%;
+  bottom: 14%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: var(--ink);
+}
+
+.once {
+  margin: 0;
+  color: var(--green);
+  font-size: clamp(2.5rem, 8.7vh, 5.8rem);
+  font-weight: 400;
+  line-height: .77;
+}
+
+.subtitle {
+  margin: 1.0vh 0 0;
+  color: var(--green);
+  font-size: clamp(1.35rem, 4vh, 2.65rem);
+  font-weight: 400;
+  line-height: .85;
+}
+
+.ornament {
+  width: 42%;
+  margin: 1.3vh 0 1.5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .7rem;
+  color: var(--green);
+}
+
+.ornament span {
+  height: 1px;
+  flex: 1;
+  background: currentColor;
+  opacity: .55;
+}
+
+.ornament b {
+  font-size: .85rem;
+  font-weight: 400;
+}
+
+.ornament.small {
+  width: 34%;
+  margin: 1.2vh 0 1.4vh;
+}
+
+.intro {
+  margin: 0;
+  font-size: clamp(.74rem, 2.0vh, 1.18rem);
+  line-height: 1.55;
+  color: #222;
+}
+
+.intro strong {
+  color: var(--green-deep);
+  font-weight: 700;
+}
+
+.invitation {
+  margin: 1.6vh 0 1.4vh;
+  color: var(--green);
+  font-size: clamp(1.65rem, 4.8vh, 3.1rem);
+  line-height: .9;
+}
+
+.details {
+  margin: 0;
+  font-size: clamp(.66rem, 1.75vh, 1rem);
+  line-height: 1.55;
+  color: #222;
+}
+
+.details p {
+  margin: .12rem 0;
+}
+
+.details strong {
+  color: var(--green-deep);
+  font-weight: 700;
+}
+
+.primary-button {
+  border: 0;
+  color: #fffdf5;
+  background:
+    linear-gradient(180deg, #4f7138 0%, #375828 100%);
+  box-shadow:
+    0 8px 15px rgba(54,76,37,.28),
+    inset 0 0 0 2px rgba(255,255,255,.10);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.page-one-button {
+  width: min(80%, 420px);
+  min-height: 5.3vh;
+  padding: .6vh 1rem .9vh;
+  border-radius: 999px;
+  font-size: clamp(1.45rem, 4.4vh, 2.8rem);
+  line-height: .82;
+}
+
+.primary-button:active {
+  transform: translateY(1px);
+}
+
+.primary-button:focus-visible,
+.back-button:focus-visible,
+#guestName:focus-visible {
+  outline: 3px solid rgba(80,113,56,.38);
+  outline-offset: 2px;
+}
+
+/* =====================================
+   "PONTINHA" DA PÁGINA
+   ===================================== */
+
+.corner-peel {
+  position: absolute;
+  z-index: 9;
+  right: .5%;
+  bottom: .55%;
+  width: 9.5%;
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+  transform-origin: 100% 100%;
+  opacity: .9;
+}
+
+.corner-front {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.88) 0%,
+      #e7d0a3 47%,
+      #b58b55 100%
+    );
+  box-shadow: -5px -5px 10px rgba(53,32,14,.18);
+  transform-origin: 100% 100%;
+}
+
+.corner-shadow {
+  position: absolute;
+  right: 2%;
+  bottom: 1%;
+  width: 90%;
+  height: 90%;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  background: rgba(44,25,10,.22);
+  filter: blur(5px);
+  transform: translate(-4px,-4px);
+  z-index: -1;
+}
+
+.book.corner-lift .corner-front {
+  animation: cornerLift .28s ease-out forwards;
+}
+
+.book.corner-lift .corner-shadow {
+  animation: cornerShadow .28s ease-out forwards;
+}
+
+@keyframes cornerLift {
+  0%   { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(-16deg) scale(1.22) translate(-5%, -5%); }
+}
+
+@keyframes cornerShadow {
+  0%   { opacity: .6; transform: translate(-4px,-4px) scale(1); }
+  100% { opacity: 1; transform: translate(-12px,-12px) scale(1.22); }
+}
+
+/* =====================================
+   VIRADA CLICHÊ
+   ===================================== */
+
+.book.turning .flip-page {
+  animation: classicPageTurn 1.15s cubic-bezier(.55,.02,.24,.99) forwards;
+}
+
+@keyframes classicPageTurn {
+  0% {
+    transform: rotateY(0deg) translateZ(0) rotateZ(0deg);
+  }
+  12% {
+    transform: rotateY(-7deg) translateZ(9px) rotateZ(-.3deg);
+  }
+  28% {
+    transform: rotateY(-30deg) translateZ(28px) rotateZ(-1deg);
+  }
+  48% {
+    transform: rotateY(-78deg) translateZ(48px) rotateZ(-1.4deg);
+  }
+  64% {
+    transform: rotateY(-116deg) translateZ(40px) rotateZ(-1deg);
+  }
+  82% {
+    transform: rotateY(-154deg) translateZ(20px) rotateZ(-.4deg);
+  }
+  100% {
+    transform: rotateY(-180deg) translateZ(0) rotateZ(0deg);
+  }
+}
+
+.book.open .flip-page {
+  transform: rotateY(-180deg);
+  pointer-events: none;
+}
+
+/* =====================================
    PÁGINA 2
-   ========================= */
+   ===================================== */
 
 .page-two {
   z-index: 1;
   opacity: 0;
-  transform: translateZ(-2px);
   pointer-events: none;
-  transition: opacity .18s ease .30s;
+  transition: opacity .22s ease .34s;
 }
 
 .book.open .page-two {
@@ -154,285 +416,171 @@ input {
   pointer-events: auto;
 }
 
-/* =========================
-   PÁGINA 1 / VIRADA
-   ========================= */
-
-.page-one {
-  z-index: 3;
-  pointer-events: auto;
-}
-
-.flip-sheet {
-  transform-origin: 2.6% 50%;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-
-.face {
-  overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.front {
-  transform: rotateY(0deg);
-}
-
-.back {
-  transform: rotateY(180deg);
-}
-
-.paper-back {
+.page-two-content {
   position: absolute;
-  inset: 0;
-  border-radius: 2.4%;
-  background:
-    linear-gradient(90deg, rgba(83,50,19,.18), transparent 11%),
-    radial-gradient(circle at 45% 30%, #fff8e8, #ead8b8 78%);
-  box-shadow:
-    inset 12px 0 20px rgba(74,45,19,.17),
-    inset -3px 0 8px rgba(255,255,255,.55);
+  z-index: 5;
+  left: 15.8%;
+  right: 15.8%;
+  top: 30.2%;
+  bottom: 16%;
+  text-align: center;
+  color: var(--ink);
 }
 
-/* sombra que atravessa a folha enquanto ela dobra */
-.turn-shadow {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(26,14,6,.38) 0%,
-      rgba(26,14,6,.07) 17%,
-      transparent 43%,
-      rgba(255,255,255,.13) 64%,
-      rgba(23,12,5,.23) 100%
-    );
-  mix-blend-mode: multiply;
-}
-
-/*
-  Mais convincente do que um simples rotateY:
-  a folha começa quase plana, avança para o observador,
-  estreita no meio e só então fecha para a esquerda.
-*/
-.book.turning .flip-sheet {
-  animation: pageTurn 1.28s cubic-bezier(.58,.03,.26,.99) forwards;
-}
-
-.book.turning .turn-shadow {
-  animation: shadowTurn 1.28s ease forwards;
-}
-
-.book.open .flip-sheet {
-  transform: rotateY(-180deg);
-  pointer-events: none;
-}
-
-@keyframes pageTurn {
-  0% {
-    transform: translateZ(0) rotateY(0deg) scaleX(1);
-  }
-  18% {
-    transform: translateZ(16px) rotateY(-16deg) scaleX(.997);
-  }
-  46% {
-    transform: translateZ(34px) rotateY(-72deg) scaleX(.965);
-  }
-  70% {
-    transform: translateZ(25px) rotateY(-127deg) scaleX(.974);
-  }
-  88% {
-    transform: translateZ(10px) rotateY(-166deg) scaleX(.994);
-  }
-  100% {
-    transform: translateZ(0) rotateY(-180deg) scaleX(1);
-  }
-}
-
-@keyframes shadowTurn {
-  0%   { opacity: 0; }
-  22%  { opacity: .28; }
-  52%  { opacity: .66; }
-  78%  { opacity: .34; }
-  100% { opacity: 0; }
-}
-
-/* =========================
-   ÁREAS CLICÁVEIS
-   ========================= */
-
-.hotspot {
-  position: absolute;
-  z-index: 20;
+.page-two-title {
   margin: 0;
-  padding: 0;
+  color: var(--green);
+  font-size: clamp(3rem, 8vh, 5.3rem);
+  font-weight: 400;
+  line-height: .8;
+}
+
+.page-two-copy {
+  margin: 1.3vh auto 2.4vh;
+  font-size: clamp(.72rem, 1.8vh, 1.05rem);
+  line-height: 1.55;
+  color: #40443c;
+}
+
+#rsvpForm {
+  width: 100%;
+  text-align: left;
+}
+
+.field-label {
+  display: block;
+  margin: 0 0 .6vh;
+  color: var(--green-deep);
+  font-size: clamp(.75rem, 1.9vh, 1.05rem);
+  font-weight: 700;
+}
+
+#guestName {
+  width: 100%;
+  min-height: 5.6vh;
+  padding: 0 4%;
+  border: 2px solid #416334;
+  border-radius: 1.1vh;
+  outline: none;
+  background: rgba(255,250,239,.95);
+  color: #656565;
+  font-family: "Poppins", sans-serif;
+  font-size: max(16px, 1.95vh);
+}
+
+#guestName::placeholder {
+  color: #858585;
+}
+
+#confirmButton {
+  width: 100%;
+  min-height: 5.8vh;
+  margin-top: 1.8vh;
+  border-radius: 999px;
+  padding: .5vh .8rem .8vh;
+  font-size: clamp(1.55rem, 4.2vh, 2.7rem);
+  line-height: .82;
+}
+
+.status {
+  min-height: 1.8vh;
+  margin: .7vh 0 0;
+  color: #8e1d20;
+  text-align: center;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(.64rem, 1.55vh, .85rem);
+}
+
+.back-button {
+  margin-top: 2.7vh;
   border: 0;
   background: transparent;
+  color: var(--green-deep);
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(.68rem, 1.65vh, .92rem);
+  font-weight: 600;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.hotspot:focus-visible {
-  outline: 3px solid rgba(255,255,255,.95);
-  outline-offset: 2px;
-}
+/* =====================================
+   SUCESSO
+   ===================================== */
 
-/* Página 1: botão desenhado */
-.page-one-hotspot {
-  left: 25.1%;
-  top: 67.3%;
-  width: 50.5%;
-  height: 6.0%;
-  border-radius: 999px;
-}
-
-/* =========================
-   PÁGINA 2 FUNCIONAL
-   ========================= */
-
-/*
-  Coordenadas tiradas diretamente da nova arte 947 × 2048.
-  Tudo é percentual, então funciona em qualquer tamanho de celular.
-*/
-
-.name-input {
+.success-card {
   position: absolute;
-  z-index: 21;
-
-  left: 19.6%;
-  top: 49.7%;
-  width: 60.4%;
-  height: 5.0%;
-
-  margin: 0;
-  padding: 0 3.2%;
-  border: 2px solid #315821;
-  border-radius: 13px;
-  outline: none;
-
-  background: rgba(255, 250, 239, .97);
-  color: #6b6b6b;
-
-  /*
-    16px mínimo evita o Safari dar zoom automático ao focar.
-  */
-  font-size: max(16px, 1.92vh);
-  line-height: 1;
-}
-
-.name-input::placeholder {
-  color: #8b8b8b;
-  opacity: 1;
-}
-
-.name-input:focus {
-  box-shadow: 0 0 0 3px rgba(49,88,33,.15);
-}
-
-.confirm-hotspot {
-  left: 24.0%;
-  top: 57.35%;
-  width: 52.0%;
-  height: 5.2%;
-  border-radius: 999px;
-}
-
-.back-hotspot {
-  left: 40.8%;
-  top: 68.1%;
-  width: 18.4%;
-  height: 3.2%;
-}
-
-/* =========================
-   STATUS DO ENVIO
-   ========================= */
-
-.sending {
-  position: absolute;
-  z-index: 40;
-  left: 50%;
-  top: 64%;
-  transform: translateX(-50%);
-  padding: 7px 13px;
-  border-radius: 999px;
-  background: rgba(255,248,232,.97);
-  color: #355426;
-  font-size: max(12px, 1.55vh);
-  font-weight: 700;
-  box-shadow: 0 5px 15px rgba(0,0,0,.14);
-}
-
-/*
-  Começa SEMPRE oculto pelo atributo hidden.
-  Só o JavaScript remove hidden após um envio real.
-*/
-.success {
-  position: absolute;
-  z-index: 50;
-  left: 20%;
-  top: 43%;
-  width: 60%;
-  padding: 5% 4%;
-
-  display: grid;
-  gap: 7px;
-  text-align: center;
-
-  border: 2px solid rgba(49,88,33,.78);
-  border-radius: 18px;
-
+  left: 3%;
+  right: 3%;
+  top: 10%;
+  padding: 3.2vh 7%;
+  border: 2px solid rgba(64,96,47,.62);
+  border-radius: 1.5vh;
   background: rgba(255,248,232,.985);
-  color: #315821;
-  box-shadow: 0 10px 30px rgba(0,0,0,.20);
+  box-shadow: 0 10px 28px rgba(0,0,0,.18);
+  text-align: center;
+  color: var(--green-deep);
 }
 
-.success strong {
-  font-family: Georgia, serif;
-  font-size: max(28px, 5vh);
+.success-card h2 {
+  margin: 0;
+  font-size: clamp(3.2rem, 8vh, 5rem);
+  line-height: .8;
+  font-weight: 400;
 }
 
-.success span {
-  font-size: max(13px, 1.8vh);
+.success-card p {
+  margin: 1vh 0 0;
+  font-size: clamp(.78rem, 1.9vh, 1.05rem);
 }
 
-.success small {
-  color: #981b21;
-  font-size: max(13px, 1.8vh);
+.success-card .success-last {
+  color: #942123;
+  font-size: clamp(1.55rem, 4vh, 2.5rem);
+  line-height: .9;
 }
 
 [hidden] {
   display: none !important;
 }
 
-/* =========================
-   CELULARES MAIS LARGOS
-   ========================= */
+/* =====================================
+   iPHONE / TELAS PEQUENAS
+   ===================================== */
 
-/*
-  A página continua inteira.
-  O fundo desfocado ocupa o que sobra lateralmente.
-*/
-@media (min-aspect-ratio: 9 / 16) {
-  .book {
-    height: 100%;
-    width: auto;
+@media (max-width: 430px) {
+  .page-one-content {
+    left: 11.8%;
+    right: 11.8%;
+    top: 25.7%;
+  }
+
+  .page-two-content {
+    left: 14.5%;
+    right: 14.5%;
+    top: 30.5%;
+  }
+
+  .ornament {
+    margin-top: 1vh;
+    margin-bottom: 1.1vh;
+  }
+
+  .invitation {
+    margin-top: 1.25vh;
+    margin-bottom: 1.15vh;
   }
 }
 
-/* =========================
-   REDUÇÃO DE MOVIMENTO
-   ========================= */
+/* =====================================
+   ACESSIBILIDADE
+   ===================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  .book.turning .flip-sheet {
-    animation-duration: .18s;
+  .book.turning .flip-page {
+    animation-duration: .20s;
   }
 
-  .book.turning .turn-shadow {
-    animation-duration: .18s;
+  .book.corner-lift .corner-front,
+  .book.corner-lift .corner-shadow {
+    animation-duration: .08s;
   }
 }
