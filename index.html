@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#2d1a0d">
+  <meta name="theme-color" content="#23170f">
   <title>Bosque Encantado da Malu</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,34 +12,28 @@
 
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <main class="app">
-    <div class="ambient ambient-one" id="ambient"></div>
 
-    <div class="book-shell">
+  <main class="app">
+    <div class="ambient" id="ambient"></div>
+
+    <div class="book-stage">
       <div class="book" id="book">
 
         <!-- PÁGINA 2 -->
         <section class="page page-two" id="pageTwo" aria-hidden="true">
-          <div class="page-surface page-two-surface">
-            <img src="imagens/pagina2.png" class="background-art" alt="" aria-hidden="true">
+          <div class="page-surface">
+            <img class="bg-art" src="imagens/pagina2.png" alt="" aria-hidden="true">
 
-            <div class="page-two-content">
-              <h1 class="script page-two-title">Você vem?</h1>
+            <div class="page-two-ui">
+              <h1 class="script p2-title">Você vem?</h1>
 
-              <p class="body page-two-copy">
-                Digite seu nome abaixo para confirmar sua presença no<br>
+              <p class="body p2-copy">
+                Digite seu nome abaixo para confirmar sua presença no
                 Bosque Encantado da Malu.
               </p>
 
-              <form
-                id="rsvpForm"
-                action="https://script.google.com/macros/s/AKfycbyGTDZ2F5nMObMUIIZYVHmabqmh7gmTsfAKyaQumgGIoTa4FSbtm0IMfk48s6pIwZta/exec"
-                method="POST"
-                target="submitFrame"
-                autocomplete="off"
-              >
+              <form id="rsvpForm" action="https://script.google.com/macros/s/AKfycbyGTDZ2F5nMObMUIIZYVHmabqmh7gmTsfAKyaQumgGIoTa4FSbtm0IMfk48s6pIwZta/exec" method="POST" target="submitFrame">
                 <label class="body field-label" for="guestName">Seu nome</label>
 
                 <input
@@ -52,15 +46,11 @@
                   required
                 >
 
-                <button
-                  id="confirmButton"
-                  class="script primary-button"
-                  type="submit"
-                >
+                <button id="confirmButton" class="script primary-button p2-confirm" type="submit">
                   Confirmar presença
                 </button>
 
-                <p id="statusMessage" class="status" aria-live="polite"></p>
+                <p id="statusMessage" class="body status" aria-live="polite"></p>
               </form>
 
               <button id="backButton" class="body back-button" type="button">
@@ -78,19 +68,16 @@
 
         <!-- PÁGINA 1 -->
         <section class="page page-one" id="pageOne">
-          <div class="flip-page" id="flipPage">
-            <div class="face front-face">
+          <div class="turning-page" id="turningPage">
+            <div class="page-face page-front">
               <div class="page-surface">
-                <img src="imagens/pagina1.png" class="background-art" alt="" aria-hidden="true">
+                <img class="bg-art" src="imagens/pagina1.png" alt="" aria-hidden="true">
 
-                <div class="page-one-content">
+                <div class="page-one-ui">
                   <h1 class="script once">Era uma vez...</h1>
-
                   <h2 class="script subtitle">O Bosque Encantado da Malu!</h2>
 
-                  <div class="ornament" aria-hidden="true">
-                    <span></span><b>♥</b><span></span>
-                  </div>
+                  <div class="ornament"><span></span><b>♥</b><span></span></div>
 
                   <p class="body intro">
                     A Malu vai completar seu <strong>1º aninho</strong><br>
@@ -100,33 +87,30 @@
 
                   <p class="script invitation">Venha fazer parte desse dia lindo!</p>
 
-                  <div class="details body">
+                  <div class="body details">
                     <p><strong>Data:</strong> 31/10/2026, às 12h</p>
                     <p><strong>Local:</strong> Rua Primo Porcari, 51 - Medeiros/Jundiaí</p>
                   </div>
 
-                  <div class="ornament small" aria-hidden="true">
-                    <span></span><b>♥</b><span></span>
-                  </div>
+                  <div class="ornament small"><span></span><b>♥</b><span></span></div>
 
-                  <button
-                    id="turnPageButton"
-                    class="script primary-button page-one-button"
-                    type="button"
-                  >
-                    ♥&nbsp; Confirme sua presença aqui &nbsp;♥
+                  <button id="turnPageButton" class="script primary-button p1-button" type="button">
+                    Confirme sua presença aqui
                   </button>
                 </div>
 
-                <!-- pontinha da folha -->
-                <div class="corner-peel" aria-hidden="true">
-                  <div class="corner-front"></div>
-                  <div class="corner-shadow"></div>
+                <!-- dobra visual da pontinha -->
+                <div class="page-corner" aria-hidden="true">
+                  <div class="corner-fold"></div>
+                  <div class="corner-cast"></div>
                 </div>
+
+                <!-- sombra da dobra durante a virada -->
+                <div class="moving-shadow" aria-hidden="true"></div>
               </div>
             </div>
 
-            <div class="face back-face" aria-hidden="true">
+            <div class="page-face page-back" aria-hidden="true">
               <div class="paper-back"></div>
             </div>
           </div>
@@ -136,13 +120,7 @@
     </div>
   </main>
 
-  <iframe
-    id="submitFrame"
-    name="submitFrame"
-    src="about:blank"
-    title="Envio da confirmação"
-    hidden
-  ></iframe>
+  <iframe id="submitFrame" name="submitFrame" src="about:blank" title="Envio da confirmação" hidden></iframe>
 
   <script src="script.js"></script>
 </body>
