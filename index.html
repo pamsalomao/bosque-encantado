@@ -3,102 +3,130 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#20150d">
+  <meta name="theme-color" content="#2d1a0d">
   <title>Bosque Encantado da Malu</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Updock&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <main class="app">
-    <!-- Fundo desfocado: preenche a tela sem cortar a arte principal -->
-    <div class="ambient-bg" id="ambientBg" aria-hidden="true"></div>
+    <div class="ambient ambient-one" id="ambient"></div>
 
-    <div class="book-stage">
+    <div class="book-shell">
       <div class="book" id="book">
 
-        <!-- PÁGINA 2 FICA POR BAIXO -->
+        <!-- PÁGINA 2 -->
         <section class="page page-two" id="pageTwo" aria-hidden="true">
-          <div class="page-frame">
-            <img
-              class="art"
-              src="imagens/pagina2.png"
-              alt="Confirmação de presença do Bosque Encantado da Malu"
-              draggable="false"
-            >
+          <div class="page-surface page-two-surface">
+            <img src="imagens/pagina2.png" class="background-art" alt="" aria-hidden="true">
 
-            <!-- Campo funcional sobre o campo desenhado na imagem -->
-            <form
-              id="rsvpForm"
-              action="https://script.google.com/macros/s/AKfycbyGTDZ2F5nMObMUIIZYVHmabqmh7gmTsfAKyaQumgGIoTa4FSbtm0IMfk48s6pIwZta/exec"
-              method="POST"
-              target="submitFrame"
-              autocomplete="off"
-            >
-              <input
-                id="guestName"
-                class="name-input"
-                name="nome"
-                type="text"
-                maxlength="80"
-                autocomplete="name"
-                placeholder="Digite seu nome"
-                aria-label="Seu nome"
-                required
+            <div class="page-two-content">
+              <h1 class="script page-two-title">Você vem?</h1>
+
+              <p class="body page-two-copy">
+                Digite seu nome abaixo para confirmar sua presença no<br>
+                Bosque Encantado da Malu.
+              </p>
+
+              <form
+                id="rsvpForm"
+                action="https://script.google.com/macros/s/AKfycbyGTDZ2F5nMObMUIIZYVHmabqmh7gmTsfAKyaQumgGIoTa4FSbtm0IMfk48s6pIwZta/exec"
+                method="POST"
+                target="submitFrame"
+                autocomplete="off"
               >
+                <label class="body field-label" for="guestName">Seu nome</label>
 
-              <!-- Botão invisível sobre o botão já desenhado -->
-              <button
-                id="confirmButton"
-                class="hotspot confirm-hotspot"
-                type="submit"
-                aria-label="Confirmar presença"
-              ></button>
-            </form>
+                <input
+                  id="guestName"
+                  name="nome"
+                  type="text"
+                  maxlength="80"
+                  autocomplete="name"
+                  placeholder="Digite seu nome"
+                  required
+                >
 
-            <!-- Botão invisível sobre o “Voltar” desenhado -->
-            <button
-              id="backButton"
-              class="hotspot back-hotspot"
-              type="button"
-              aria-label="Voltar à primeira página"
-            ></button>
+                <button
+                  id="confirmButton"
+                  class="script primary-button"
+                  type="submit"
+                >
+                  Confirmar presença
+                </button>
 
-            <div id="sendingMessage" class="sending" hidden>
-              Enviando...
-            </div>
+                <p id="statusMessage" class="status" aria-live="polite"></p>
+              </form>
 
-            <div id="successMessage" class="success" hidden>
-              <strong>Oba!</strong>
-              <span>Sua presença foi confirmada.</span>
-              <small>A Malu espera por você! ♥</small>
+              <button id="backButton" class="body back-button" type="button">
+                ← Voltar
+              </button>
+
+              <div id="successMessage" class="success-card" hidden>
+                <h2 class="script">Oba!</h2>
+                <p class="body">Sua presença foi confirmada.</p>
+                <p class="script success-last">A Malu espera por você! ♥</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <!-- PÁGINA 1 É A FOLHA QUE VIRA -->
+        <!-- PÁGINA 1 -->
         <section class="page page-one" id="pageOne">
-          <div class="flip-sheet" id="flipSheet">
-            <div class="face front">
-              <img
-                class="art"
-                src="imagens/pagina1.png"
-                alt="Convite Bosque Encantado da Malu"
-                draggable="false"
-              >
+          <div class="flip-page" id="flipPage">
+            <div class="face front-face">
+              <div class="page-surface">
+                <img src="imagens/pagina1.png" class="background-art" alt="" aria-hidden="true">
 
-              <!-- Área clicável sobre “Confirme sua presença aqui” -->
-              <button
-                id="turnPageButton"
-                class="hotspot page-one-hotspot"
-                type="button"
-                aria-label="Confirme sua presença aqui"
-              ></button>
+                <div class="page-one-content">
+                  <h1 class="script once">Era uma vez...</h1>
 
-              <div class="turn-shadow" aria-hidden="true"></div>
+                  <h2 class="script subtitle">O Bosque Encantado da Malu!</h2>
+
+                  <div class="ornament" aria-hidden="true">
+                    <span></span><b>♥</b><span></span>
+                  </div>
+
+                  <p class="body intro">
+                    A Malu vai completar seu <strong>1º aninho</strong><br>
+                    e queremos você conosco para celebrar<br>
+                    esse momento cheio de amor e alegria.
+                  </p>
+
+                  <p class="script invitation">Venha fazer parte desse dia lindo!</p>
+
+                  <div class="details body">
+                    <p><strong>Data:</strong> 31/10/2026, às 12h</p>
+                    <p><strong>Local:</strong> Rua Primo Porcari, 51 - Medeiros/Jundiaí</p>
+                  </div>
+
+                  <div class="ornament small" aria-hidden="true">
+                    <span></span><b>♥</b><span></span>
+                  </div>
+
+                  <button
+                    id="turnPageButton"
+                    class="script primary-button page-one-button"
+                    type="button"
+                  >
+                    ♥&nbsp; Confirme sua presença aqui &nbsp;♥
+                  </button>
+                </div>
+
+                <!-- pontinha da folha -->
+                <div class="corner-peel" aria-hidden="true">
+                  <div class="corner-front"></div>
+                  <div class="corner-shadow"></div>
+                </div>
+              </div>
             </div>
 
-            <!-- Verso da folha durante a virada -->
-            <div class="face back" aria-hidden="true">
+            <div class="face back-face" aria-hidden="true">
               <div class="paper-back"></div>
             </div>
           </div>
@@ -111,8 +139,8 @@
   <iframe
     id="submitFrame"
     name="submitFrame"
-    title="Envio da confirmação"
     src="about:blank"
+    title="Envio da confirmação"
     hidden
   ></iframe>
 
