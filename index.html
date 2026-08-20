@@ -20,7 +20,7 @@
     <div class="book-stage">
       <div class="book" id="book">
 
-        <!-- PÁGINA 2 -->
+        <!-- PÁGINA 2: fica sempre pronta por baixo da primeira -->
         <section class="page page-two" id="pageTwo" aria-hidden="true">
           <div class="page-surface">
             <img class="bg-art" src="imagens/pagina2.png" alt="" aria-hidden="true">
@@ -61,6 +61,10 @@
                 <h2 class="script">Oba!</h2>
                 <p class="body">Sua presença foi confirmada.</p>
                 <p class="script success-last">A Malu espera por você! ♥</p>
+
+                <button id="okButton" class="script ok-button" type="button">
+                  Ok
+                </button>
               </div>
             </div>
           </div>
@@ -69,6 +73,7 @@
         <!-- PÁGINA 1 -->
         <section class="page page-one" id="pageOne">
           <div class="turning-page" id="turningPage">
+
             <div class="page-face page-front">
               <div class="page-surface">
                 <img class="bg-art" src="imagens/pagina1.png" alt="" aria-hidden="true">
@@ -99,20 +104,21 @@
                   </button>
                 </div>
 
-                <!-- dobra visual da pontinha -->
-                <div class="page-corner" aria-hidden="true">
-                  <div class="corner-fold"></div>
-                  <div class="corner-cast"></div>
+                <!-- pontinha da folha que “pega” primeiro -->
+                <div class="peel-corner" aria-hidden="true">
+                  <div class="peel-paper"></div>
+                  <div class="peel-shadow"></div>
                 </div>
 
-                <!-- sombra da dobra durante a virada -->
-                <div class="moving-shadow" aria-hidden="true"></div>
+                <!-- sombra que atravessa a página durante a virada -->
+                <div class="sweep-shadow" aria-hidden="true"></div>
               </div>
             </div>
 
             <div class="page-face page-back" aria-hidden="true">
               <div class="paper-back"></div>
             </div>
+
           </div>
         </section>
 
