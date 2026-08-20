@@ -2,53 +2,81 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#efe9db">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1f160f">
   <title>Bosque Encantado da Malu</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Updock&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <main class="site-shell">
+  <main class="viewport">
     <div class="book" id="book">
 
-      <section class="page page-one" aria-label="Convite Bosque Encantado da Malu">
-        <img class="invite-image" src="imagens/pagina1.jpg" alt="Convite Bosque Encantado da Malu">
-        <button id="openBook" class="page-one-hotspot" type="button"
-                aria-label="Confirme sua presença aqui"></button>
+      <!-- PÁGINA 1 -->
+      <section class="page page-1" id="page1" aria-label="Convite do Bosque Encantado da Malu">
+        <div class="sheet sheet-1">
+          <img src="imagens/pagina1.png" alt="Convite do Bosque Encantado da Malu">
+
+          <!-- Área clicável posicionada sobre o botão que já existe na imagem -->
+          <button
+            id="turnPageButton"
+            class="hotspot page1-button"
+            type="button"
+            aria-label="Confirme sua presença aqui"
+          ></button>
+        </div>
       </section>
 
-      <section class="page page-two" id="pageTwo" aria-hidden="true">
-        <div class="page-two-content">
-          <div class="confirm-card">
-            <h1 class="updock">Você vem?</h1>
-            <p>
-              Digite seu nome abaixo para confirmar sua presença no
-              Bosque Encantado da Malu.
-            </p>
+      <!-- PÁGINA 2 -->
+      <section class="page page-2" id="page2" aria-hidden="true">
+        <div class="sheet sheet-2">
+          <img src="imagens/pagina2.png" alt="Página para confirmação de presença">
 
-            <form id="rsvpForm" action="https://script.google.com/macros/s/AKfycbyGTDZ2F5nMObMUIIZYVHmabqmh7gmTsfAKyaQumgGIoTa4FSbtm0IMfk48s6pIwZta/exec" method="POST" target="submitFrame">
-              <label for="guestName">Seu nome</label>
-              <input id="guestName" name="nome" type="text"
-                     maxlength="80" placeholder="Digite seu nome"
-                     autocomplete="name" required>
+          <form
+            id="rsvpForm"
+            class="rsvp-form"
+            action="https://script.google.com/macros/s/AKfycbyGTDZ2F5nMObMUIIZYVHmabqmh7gmTsfAKyaQumgGIoTa4FSbtm0IMfk48s6pIwZta/exec"
+            method="POST"
+            target="submitFrame"
+          >
+            <!-- Campo real sobre o campo desenhado na imagem -->
+            <input
+              id="guestName"
+              class="name-input"
+              name="nome"
+              type="text"
+              maxlength="80"
+              autocomplete="name"
+              placeholder="Digite seu nome"
+              aria-label="Seu nome"
+              required
+            >
 
-              <button id="confirmButton" class="confirm-button updock" type="submit">
-                Confirmar presença
-              </button>
+            <!-- Botão real sobre o botão desenhado na imagem -->
+            <button
+              id="confirmButton"
+              class="hotspot page2-confirm"
+              type="submit"
+              aria-label="Confirmar presença"
+            ></button>
+          </form>
 
-              <p id="statusMessage" class="status" aria-live="polite"></p>
-            </form>
+          <!-- Botão real sobre o “Voltar” desenhado na imagem -->
+          <button
+            id="backButton"
+            class="hotspot page2-back"
+            type="button"
+            aria-label="Voltar para a primeira página"
+          ></button>
 
-            <div id="successBox" class="success" hidden>
-              <h2 class="updock">Oba!</h2>
-              <p>Sua presença foi confirmada.</p>
-              <p class="updock success-final">A Malu espera por você! ♥</p>
-            </div>
+          <div id="sendingMessage" class="feedback" hidden>
+            Enviando...
+          </div>
 
-            <button id="backButton" class="back-button" type="button">← Voltar</button>
+          <div id="successMessage" class="success-panel" hidden>
+            <strong>Oba!</strong>
+            <span>Sua presença foi confirmada.</span>
+            <small>A Malu espera por você! ♥</small>
           </div>
         </div>
       </section>
@@ -56,7 +84,13 @@
     </div>
   </main>
 
-  <iframe name="submitFrame" title="Envio da confirmação" hidden></iframe>
+  <iframe
+    id="submitFrame"
+    name="submitFrame"
+    title="Envio da confirmação"
+    hidden
+  ></iframe>
+
   <script src="script.js"></script>
 </body>
 </html>
