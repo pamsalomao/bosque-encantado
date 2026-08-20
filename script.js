@@ -1,52 +1,73 @@
-const book=document.getElementById("book");
-const openBook=document.getElementById("openBook");
-const pageTwo=document.getElementById("pageTwo");
-const backButton=document.getElementById("backButton");
-const form=document.getElementById("rsvpForm");
-const guestName=document.getElementById("guestName");
-const confirmButton=document.getElementById("confirmButton");
-const statusMessage=document.getElementById("statusMessage");
-const successBox=document.getElementById("successBox");
+const book = document.getElementById("book");
+const page2 = document.getElementById("page2");
+const turnPageButton = document.getElementById("turnPageButton");
+const backButton = document.getElementById("backButton");
 
-openBook.addEventListener("click",()=>{
+const form = document.getElementById("rsvpForm");
+const guestName = document.getElementById("guestName");
+const confirmButton = document.getElementById("confirmButton");
+
+const sendingMessage = document.getElementById("sendingMessage");
+const successMessage = document.getElementById("successMessage");
+const submitFrame = document.getElementById("submitFrame");
+
+let waitingForSubmission = false;
+
+function openSecondPage() {
   book.classList.add("open");
-  pageTwo.setAttribute("aria-hidden","false");
-  setTimeout(()=>guestName.focus(),700);
-});
+  page2.setAttribute("aria-hidden", "false");
 
-backButton.addEventListener("click",()=>{
+  setTimeout(() => {
+    guestName.focus({ preventScroll: true });
+  }, 950);
+}
+
+function returnToFirstPage() {
   book.classList.remove("open");
-  pageTwo.setAttribute("aria-hidden","true");
-  form.hidden=false;
-  successBox.hidden=true;
-  guestName.value="";
-  statusMessage.textContent="";
-  confirmButton.disabled=false;
-  confirmButton.textContent="Confirmar presença";
-});
+  page2.setAttribute("aria-hidden", "true");
 
-form.addEventListener("submit",(event)=>{
-  const nome=guestName.value.trim();
-  if(!nome){
+  form.hidden = false;
+  successMessage.hidden = true;
+  sendingMessage.hidden = true;
+
+  guestName.value = "";
+  confirmButton.disabled = false;
+  waitingForSubmission = false;
+}
+
+turnPageButton.addEventListener("click", openSecondPage);
+backButton.addEventListener("click", returnToFirstPage);
+
+form.addEventListener("submit", (event) => {
+  const nome = guestName.value.trim();
+
+  if (!nome) {
     event.preventDefault();
-    statusMessage.textContent="Por favor, informe seu nome.";
-    guestName.focus();
+    guestName.focus({ preventScroll: true });
     return;
   }
-  statusMessage.textContent="Enviando...";
-  confirmButton.disabled=true;
-  confirmButton.textContent="Enviando...";
 
-  setTimeout(()=>{
-    form.hidden=true;
-    successBox.hidden=false;
-    statusMessage.textContent="";
-    guestName.value="";
-    confirmButton.disabled=false;
-    confirmButton.textContent="Confirmar presença";
-  },1000);
+  waitingForSubmission = true;
+  sendingMessage.hidden = false;
+  confirmButton.disabled = true;
 });
 
-guestName.addEventListener("input",()=>{
-  if(guestName.value.trim()) statusMessage.textContent="";
+/*
+  O iframe dispara "load" quando o Google Apps Script termina de responder.
+  Só mostramos sucesso se houve um envio de verdade.
+*/
+submitFrame.addEventListener("load", () => {
+  if (!waitingForSubmission) return;
+
+  waitingForSubmission = false;
+  sendingMessage.hidden = true;
+  confirmButton.disabled = false;
+  form.hidden = true;
+  successMessage.hidden = false;
+  guestName.value = "";
+});
+
+/* Evita o zoom automático do iPhone em alguns campos ao receber foco. */
+guestName.addEventListener("focus", () => {
+  document.documentElement.style.setProperty("--input-active", "1");
 });
