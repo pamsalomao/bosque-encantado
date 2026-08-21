@@ -133,25 +133,19 @@ button,input{font:inherit}
 }
 
 /*
-  V9: a Página 1 passa a usar um layout "travado".
-  Cada bloco tem sua própria posição absoluta dentro da área clara.
-  Assim uma fonte não empurra a outra no Safari/Chrome.
+  V12 — layout rígido da Página 1.
+  Tudo abaixo é posicionado em coordenadas proporcionais ao próprio livro.
+  Nenhum bloco usa fluxo de documento para empurrar outro bloco.
 */
 .page-one-ui{
   position:absolute;
   z-index:5;
-
-  /* coluna segura no miolo claro do fundo */
-  left:19.5%;
-  right:19.5%;
-  top:31.0%;
-  height:34.2%;
-
+  inset:0;
   color:var(--ink);
   text-align:center;
+  pointer-events:none;
 }
 
-/* Cada item tem uma caixa própria. */
 .once,
 .subtitle,
 .intro,
@@ -161,135 +155,139 @@ button,input{font:inherit}
 .page-one-ui .ornament.small,
 .p1-button{
   position:absolute;
-  left:0;
-  right:0;
   margin:0;
 }
 
-/* "Era uma vez..." */
+/* título */
 .once{
-  top:0%;
-  height:14.5%;
+  left:20.5%;
+  right:20.5%;
+  top:29.15%;
+  height:5.2%;
   display:flex;
   align-items:center;
   justify-content:center;
-
-  color:var(--green);
-  font-size:6.35cqh;
-  line-height:.78;
+  color:#355b2c;
+  font-size:6.15cqh;
+  line-height:.76;
   font-weight:400;
   white-space:nowrap;
 }
 
-/*
-  Subtítulo tem uma faixa separada.
-  O espaço entre 14.5% e 17.5% é intencional para o Z nunca encostar no M.
-*/
+/* subtítulo: mais escuro/forte para leitura, inclusive por idosos */
 .subtitle{
-  top:17.5%;
-  height:8.8%;
+  left:21.5%;
+  right:21.5%;
+  top:34.25%;
+  height:3.8%;
   display:flex;
   align-items:center;
   justify-content:center;
-
-  color:var(--green);
-  font-size:2.95cqh;
-  line-height:.88;
-  font-weight:400;
+  color:#2f5428;
+  font-size:3.00cqh;
+  line-height:.82;
+  font-weight:500;
   white-space:nowrap;
+  text-shadow:0 0 .01px currentColor;
 }
 
-/* Divisória: somente linha verde, sem coração/emoji. */
+/* linha superior */
 .page-one-ui .ornament{
-  top:28.6%;
-  left:34%;
-  right:34%;
+  left:39%;
+  right:39%;
+  top:38.15%;
   height:1px;
   display:block;
-  background:var(--green);
-  opacity:.48;
+  background:#426233;
+  opacity:.62;
 }
+.page-one-ui .ornament span,
+.page-one-ui .ornament b{display:none}
 
-.page-one-ui .ornament span{
-  display:none;
-}
-
-.page-one-ui .ornament b{
-  display:none;
-}
-
-/* Texto principal */
+/*
+  Texto principal:
+  largura reduzida de propósito para terminar antes da borboleta da direita.
+  Cada linha é indivisível, portanto Safari/Chrome não redistribuem palavras.
+*/
 .intro{
-  top:32.6%;
-  height:20.8%;
-
-  color:#232421;
-  font-size:1.62cqh;
-  line-height:1.38;
-  text-align:center;
-  white-space:nowrap;
-}
-
-.intro .no-break{
-  white-space:nowrap;
-  display:inline;
-}
-
-.intro strong{
-  color:var(--green-dark);
-  font-weight:700;
-}
-
-/* Frase manuscrita */
-.invitation{
-  top:55.5%;
-  height:10%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  color:var(--green);
-  font-size:2.82cqh;
-  line-height:.88;
-  white-space:nowrap;
-}
-
-/* Data e local */
-.details{
-  top:67.0%;
-  height:10.8%;
+  left:21.5%;
+  right:25.5%;
+  top:39.55%;
+  height:7.1%;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
+  gap:.20cqh;
+  color:#20211f;
+  font-size:1.52cqh;
+  line-height:1.22;
+  text-align:center;
+}
 
-  color:#232421;
-  font-size:1.34cqh;
-  line-height:1.38;
+.locked-line{
+  display:block;
+  width:100%;
   white-space:nowrap;
+  text-align:center;
 }
 
-.details p{
-  margin:.05em 0;
-}
-
-.details strong{
-  color:var(--green-dark);
+.intro strong{
+  color:#2f5428;
   font-weight:700;
 }
 
-/* Segunda divisória: linha simples, sem coração. */
-.page-one-ui .ornament.small{
-  top:80.0%;
-  left:37%;
-  right:37%;
-  height:1px;
-  display:block;
-  background:var(--green);
-  opacity:.48;
+/* manuscrito: mais escuro e ligeiramente maior */
+.invitation{
+  left:23%;
+  right:23%;
+  top:47.0%;
+  height:3.8%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#31572a;
+  font-size:2.88cqh;
+  line-height:.82;
+  font-weight:500;
+  white-space:nowrap;
+  text-shadow:0 0 .01px currentColor;
 }
 
-/* Base comum dos botões */
+/* Data/local maiores e mais legíveis */
+.details{
+  left:22.5%;
+  right:22.5%;
+  top:51.1%;
+  height:5.0%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:.14cqh;
+  color:#20211f;
+  font-size:1.28cqh;
+  line-height:1.18;
+  white-space:nowrap;
+}
+.details p{margin:0}
+.details strong{
+  color:#2f5428;
+  font-weight:700;
+}
+
+/* linha inferior */
+.page-one-ui .ornament.small{
+  left:40.5%;
+  right:40.5%;
+  top:56.55%;
+  height:1px;
+  display:block;
+  background:#426233;
+  opacity:.62;
+}
+
+/* base dos botões */
 .primary-button{
   border:0;
   color:#fffdf7;
@@ -300,29 +298,23 @@ button,input{font:inherit}
 }
 
 /*
-  Botão da Página 1:
-  - menor;
-  - mais para baixo;
-  - caixa com altura fixa;
-  - overflow escondido;
-  - span centralizado e preso dentro da área interna.
+  Botão: permanece longe dos animais e ganha texto maior.
+  A frase fica presa ao interior da própria caixa.
 */
 .p1-button{
-  top:84.3%;
-  left:18%;
-  right:18%;
-  width:auto;
-  height:12.0%;
+  left:30.0%;
+  right:30.0%;
+  top:57.75%;
+  height:3.45%;
   min-height:0;
-  padding:0 .55rem;
-
+  padding:0 .35rem;
   border-radius:999px;
   overflow:hidden;
-
   display:flex;
   align-items:center;
   justify-content:center;
   text-align:center;
+  pointer-events:auto;
 }
 
 .p1-button span{
@@ -330,19 +322,13 @@ button,input{font:inherit}
   width:100%;
   max-width:100%;
   overflow:hidden;
-
   color:#fffdf7;
   font-family:"Updock",cursive;
-  font-size:2.05cqh;
-  line-height:1;
+  font-size:2.38cqh;
+  line-height:.82;
   white-space:nowrap;
   text-align:center;
-
-  /*
-    Pequena compressão horizontal torna a frase robusta mesmo se
-    Safari e Chrome calcularem a fonte alguns pixels diferente.
-  */
-  transform:scaleX(.92);
+  transform:scaleX(.90);
   transform-origin:center center;
 }
 
