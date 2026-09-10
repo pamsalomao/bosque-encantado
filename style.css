@@ -304,8 +304,8 @@ button,input,textarea{font:inherit}
 .p1-button{
   left:30.0%;
   right:30.0%;
-  top:57.75%;
-  height:3.45%;
+  top:59.35%;
+  height:3.6%;
   min-height:0;
   padding:0 .35rem;
   border-radius:999px;
@@ -561,7 +561,7 @@ button,input,textarea{font:inherit}
 .back-button{
   position:relative;
   z-index:10;
-  margin-top:2.0vh;
+  margin-top:1.15vh;
   padding:.45rem .9rem;
   border:0;
   background:transparent;
