@@ -302,10 +302,10 @@ button,input,textarea{font:inherit}
   A frase fica presa ao interior da própria caixa.
 */
 .p1-button{
-  left:30.0%;
-  right:30.0%;
+  left:27.5%;
+  right:27.5%;
   top:59.35%;
-  height:3.6%;
+  height:3.7%;
   min-height:0;
   padding:0 .35rem;
   border-radius:999px;
@@ -324,11 +324,11 @@ button,input,textarea{font:inherit}
   overflow:hidden;
   color:#fffdf7;
   font-family:"Updock",cursive;
-  font-size:2.38cqh;
-  line-height:.82;
+  font-size:2.08cqh;
+  line-height:.9;
   white-space:nowrap;
   text-align:center;
-  transform:scaleX(.90);
+  transform:none;
   transform-origin:center center;
 }
 
@@ -561,8 +561,9 @@ button,input,textarea{font:inherit}
 .back-button{
   position:relative;
   z-index:10;
-  margin-top:1.15vh;
+  margin-top:.2vh;
   padding:.45rem .9rem;
+  transform:translateY(-1.1vh);
   border:0;
   background:transparent;
   color:var(--green-dark);
