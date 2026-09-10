@@ -9,6 +9,7 @@ const okButton = document.getElementById("okButton");
 
 const form = document.getElementById("rsvpForm");
 const guestName = document.getElementById("guestName");
+const companions = document.getElementById("companions");
 const confirmButton = document.getElementById("confirmButton");
 const statusMessage = document.getElementById("statusMessage");
 const successMessage = document.getElementById("successMessage");
@@ -23,6 +24,7 @@ function resetPageTwo() {
   successMessage.hidden = true;
   statusMessage.textContent = "";
   guestName.value = "";
+  companions.value = "";
   confirmButton.disabled = false;
 }
 
@@ -35,18 +37,16 @@ function openPageTwo() {
   // Página 2 já está pronta por baixo, sem qualquer fade de entrada.
   pageTwo.setAttribute("aria-hidden", "false");
 
-  book.classList.add("peeling");
-
-  setTimeout(() => {
+  requestAnimationFrame(() => {
     book.classList.add("turning");
-  }, 120);
+  });
 
   setTimeout(() => {
-    book.classList.remove("peeling", "turning");
+    book.classList.remove("turning");
     book.classList.add("open");
     ambient.style.backgroundImage = 'url("imagens/pagina2.png")';
     animationLocked = false;
-  }, 1140);
+  }, 1120);
 }
 
 function backToPageOne() {
@@ -57,7 +57,7 @@ function backToPageOne() {
 
   book.classList.remove("open");
 
-  turningPage.style.transition = "transform .72s cubic-bezier(.22,.61,.36,1)";
+  turningPage.style.transition = "transform .78s cubic-bezier(.42,0,.18,1)";
   turningPage.style.transform = "rotateY(-180deg)";
 
   requestAnimationFrame(() => {
@@ -73,7 +73,7 @@ function backToPageOne() {
     turningPage.style.transform = "";
     pageTwo.setAttribute("aria-hidden", "true");
     animationLocked = false;
-  }, 760);
+  }, 820);
 }
 
 turnPageButton.addEventListener("click", openPageTwo);
