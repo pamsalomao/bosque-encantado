@@ -9,7 +9,6 @@ const okButton = document.getElementById("okButton");
 
 const form = document.getElementById("rsvpForm");
 const guestName = document.getElementById("guestName");
-const companions = document.getElementById("companions");
 const confirmButton = document.getElementById("confirmButton");
 const statusMessage = document.getElementById("statusMessage");
 const successMessage = document.getElementById("successMessage");
@@ -24,7 +23,6 @@ function resetPageTwo() {
   successMessage.hidden = true;
   statusMessage.textContent = "";
   guestName.value = "";
-  companions.value = "";
   confirmButton.disabled = false;
 }
 
@@ -48,7 +46,7 @@ function openPageTwo() {
     book.classList.add("open");
     ambient.style.backgroundImage = 'url("imagens/pagina2.png")';
     animationLocked = false;
-  }, 800);
+  }, 1140);
 }
 
 function backToPageOne() {
@@ -59,7 +57,7 @@ function backToPageOne() {
 
   book.classList.remove("open");
 
-  turningPage.style.transition = "transform .52s cubic-bezier(.44,.01,.20,1)";
+  turningPage.style.transition = "transform .72s cubic-bezier(.22,.61,.36,1)";
   turningPage.style.transform = "rotateY(-180deg)";
 
   requestAnimationFrame(() => {
@@ -75,7 +73,7 @@ function backToPageOne() {
     turningPage.style.transform = "";
     pageTwo.setAttribute("aria-hidden", "true");
     animationLocked = false;
-  }, 560);
+  }, 760);
 }
 
 turnPageButton.addEventListener("click", openPageTwo);
