@@ -9,6 +9,7 @@ const okButton = document.getElementById("okButton");
 
 const form = document.getElementById("rsvpForm");
 const guestName = document.getElementById("guestName");
+const companions = document.getElementById("companions");
 const confirmButton = document.getElementById("confirmButton");
 const statusMessage = document.getElementById("statusMessage");
 const successMessage = document.getElementById("successMessage");
@@ -23,6 +24,7 @@ function resetPageTwo() {
   successMessage.hidden = true;
   statusMessage.textContent = "";
   guestName.value = "";
+  companions.value = "";
   confirmButton.disabled = false;
 }
 
