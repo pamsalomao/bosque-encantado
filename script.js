@@ -48,7 +48,7 @@ function openPageTwo() {
     book.classList.add("open");
     ambient.style.backgroundImage = 'url("imagens/pagina2.png")';
     animationLocked = false;
-  }, 1120);
+  }, 1220);
 }
 
 function backToPageOne() {
@@ -59,7 +59,7 @@ function backToPageOne() {
 
   book.classList.remove("open");
 
-  turningPage.style.transition = "transform .78s cubic-bezier(.25,.46,.20,1)";
+  turningPage.style.transition = "transform .82s cubic-bezier(.22,.58,.26,1)";
   turningPage.style.transform = "rotateY(-180deg)";
 
   requestAnimationFrame(() => {
@@ -75,7 +75,7 @@ function backToPageOne() {
     turningPage.style.transform = "";
     pageTwo.setAttribute("aria-hidden", "true");
     animationLocked = false;
-  }, 800);
+  }, 860);
 }
 
 turnPageButton.addEventListener("click", openPageTwo);
