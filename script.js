@@ -38,7 +38,9 @@ function openPageTwo() {
   pageTwo.setAttribute("aria-hidden", "false");
 
   requestAnimationFrame(() => {
-    book.classList.add("turning");
+    requestAnimationFrame(() => {
+      book.classList.add("turning");
+    });
   });
 
   setTimeout(() => {
@@ -57,7 +59,7 @@ function backToPageOne() {
 
   book.classList.remove("open");
 
-  turningPage.style.transition = "transform .78s cubic-bezier(.42,0,.18,1)";
+  turningPage.style.transition = "transform .78s cubic-bezier(.25,.46,.20,1)";
   turningPage.style.transform = "rotateY(-180deg)";
 
   requestAnimationFrame(() => {
@@ -73,7 +75,7 @@ function backToPageOne() {
     turningPage.style.transform = "";
     pageTwo.setAttribute("aria-hidden", "true");
     animationLocked = false;
-  }, 820);
+  }, 800);
 }
 
 turnPageButton.addEventListener("click", openPageTwo);
