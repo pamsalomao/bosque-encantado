@@ -1,139 +1,461 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#23170f">
-  <title>Bosque Encantado da Malu</title>
+*{box-sizing:border-box}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Updock&display=swap" rel="stylesheet">
+:root{
+  --green:#426233;
+  --green-dark:#2f4c25;
+  --ink:#2d2d2a;
+  --ratio:941/1672;
+}
 
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <main class="app">
-    <div class="ambient" id="ambient"></div>
+html,body{width:100%;height:100%;margin:0}
+body{
+  overflow:hidden;
+  overscroll-behavior:none;
+  background:#21150d;
+  font-family:"Poppins",sans-serif;
+}
+button,input{font:inherit}
+.script{font-family:"Updock",cursive}
+.body{font-family:"Poppins",sans-serif}
 
-    <div class="book-stage">
-      <div class="book" id="book">
+.app{
+  position:relative;
+  width:100vw;
+  height:100svh;
+  min-height:100svh;
+  overflow:hidden;
+  isolation:isolate;
+  background:#21150d;
+}
 
-        <!-- Página 2 já fica pronta por baixo da Página 1 -->
-        <section class="page page-two" id="pageTwo" aria-hidden="true">
-          <div class="page-surface">
-            <img class="bg-art" src="imagens/pagina2.png" alt="" aria-hidden="true">
+.ambient{
+  position:absolute;
+  inset:-20px;
+  z-index:-2;
+  background:url("imagens/pagina1.png") center/cover no-repeat;
+  filter:blur(16px) brightness(.48);
+  transform:scale(1.05);
+  transition:background-image .12s ease;
+}
+.ambient::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(28,16,8,.18);
+}
 
-            <div class="page-two-ui safe-column">
-              <h1 class="script p2-title">Você vem?</h1>
+.book-stage{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  perspective:2200px;
+  overflow:hidden;
+}
 
-              <p class="body p2-copy">
-                Digite seu nome abaixo para confirmar sua presença no
-                Bosque Encantado da Malu.
-              </p>
+.book{
+  position:relative;
+  height:100%;
+  max-height:100%;
+  max-width:100%;
+  aspect-ratio:var(--ratio);
+  transform-style:preserve-3d;
+  container-type:size;
+  container-name:invitebook;
+}
 
-              <form id="rsvpForm" action="https://script.google.com/macros/s/AKfycbyGTDZ2F5nMObMUIIZYVHmabqmh7gmTsfAKyaQumgGIoTa4FSbtm0IMfk48s6pIwZta/exec" method="POST" target="submitFrame">
-                <label class="body field-label" for="guestName">Seu nome</label>
+@media (min-aspect-ratio:941/1672){
+  .book{width:100%;height:auto}
+}
 
-                <input
-                  id="guestName"
-                  name="nome"
-                  type="text"
-                  maxlength="80"
-                  autocomplete="name"
-                  placeholder="Digite seu nome"
-                  required
-                >
+.page,
+.turning-page,
+.page-face,
+.page-surface{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+.page{transform-style:preserve-3d}
 
-                <label class="body field-label companion-label" for="companions">Acompanhantes</label>
+.page-surface{
+  overflow:hidden;
+  border-radius:1.2%;
+  background:#f6ead1;
+  box-shadow:0 7px 20px rgba(0,0,0,.20);
+}
 
-                <textarea
-                  id="companions"
-                  name="acompanhantes"
-                  maxlength="250"
-                  rows="2"
-                  placeholder="Digite os nomes dos acompanhantes (opcional)"
-                ></textarea>
+.bg-art{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:fill;
+  user-select:none;
+  pointer-events:none;
+  -webkit-user-drag:none;
+}
 
-                <button id="confirmButton" class="script primary-button p2-confirm" type="submit">
-                  Confirmar presença
-                </button>
+.page-face{
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+.page-front{transform:rotateY(0deg)}
+.page-back{transform:rotateY(180deg)}
 
-                <p id="statusMessage" class="body status" aria-live="polite"></p>
-              </form>
+.paper-back{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(82,48,19,.18),transparent 11%),
+    radial-gradient(circle at 48% 34%,#fff8e5,#ead5aa 78%,#c79e68);
+  box-shadow:inset 10px 0 18px rgba(70,41,18,.15);
+}
 
-              <button id="backButton" class="body back-button" type="button">
-                ← Voltar
-              </button>
+/* Coluna segura central: evita invadir as árvores/folhas em qualquer celular */
+.safe-column{
+  left:19.5%;
+  right:19.5%;
+}
 
-              <div id="successMessage" class="success-card" hidden>
-                <h2 class="script">Oba!</h2>
-                <p class="body">Sua presença foi confirmada.</p>
-                <p class="script success-last">A Malu espera por você!</p>
+/* ============ PÁGINA 1 ============ */
 
-                <button id="okButton" class="script ok-button" type="button">
-                  Ok
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
+.page-one{
+  z-index:3;
+  pointer-events:auto;
+}
+.book.open .page-one{pointer-events:none}
 
-        <!-- Página 1 -->
-        <section class="page page-one" id="pageOne">
-          <div class="turning-page" id="turningPage">
+.turning-page{
+  transform-origin:0% 50%;
+  transform-style:preserve-3d;
+  will-change:transform;
+}
 
-            <div class="page-face page-front">
-              <div class="page-surface">
-                <img class="bg-art" src="imagens/pagina1.png" alt="" aria-hidden="true">
+/*
+  V12 — layout rígido da Página 1.
+  Tudo abaixo é posicionado em coordenadas proporcionais ao próprio livro.
+  Nenhum bloco usa fluxo de documento para empurrar outro bloco.
+*/
+.page-one-ui{
+  position:absolute;
+  z-index:5;
+  inset:0;
+  color:var(--ink);
+  text-align:center;
+  pointer-events:none;
+}
 
-                <div class="page-one-ui safe-column">
-                  <h1 class="script once">Era uma vez...</h1>
-                  <h2 class="script subtitle">O Bosque Encantado da Malu!</h2>
+.once,
+.subtitle,
+.intro,
+.invitation,
+.details,
+.page-one-ui .ornament,
+.page-one-ui .ornament.small,
+.p1-button{
+  left:26.5%;
+  right:26.5%;
+  top:59.0%;
+  height:4.05%;
+  min-height:0;
+  padding:0 1rem;
+  border-radius:999px;
+  overflow:visible;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  pointer-events:auto;
+}
 
-                  <div class="ornament" aria-hidden="true">
-                    <span></span><b>♥</b><span></span>
-                  </div>
+.p1-button span{
+  display:inline-block;
+  width:auto;
+  max-width:none;
+  overflow:visible;
+  color:#fffdf7;
+  font-family:"Updock",cursive;
+  font-size:2.55cqh;
+  line-height:1;
+  white-space:nowrap;
+  text-align:center;
+  padding:.10em .30em .18em;
+  transform:none;
+  transform-origin:center center;
+}
 
-                  <p class="body intro">
-                    <span class="locked-line">A Malu vai completar seu <strong>1º aninho</strong></span>
-                    <span class="locked-line">e queremos você conosco para celebrar</span>
-                    <span class="locked-line">esse momento cheio de amor e alegria.</span>
-                  </p>
+/* ============ VIRADA DE PÁGINA ============ */
 
-                  <p class="script invitation"><span class="locked-line">Venha fazer parte desse dia lindo!</span></p>
+.sweep-shadow{
+  position:absolute;
+  inset:0;
+  z-index:8;
+  opacity:0;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(22,11,4,.34) 0%,
+      rgba(22,11,4,.09) 16%,
+      transparent 46%,
+      rgba(255,255,255,.11) 68%,
+      rgba(22,11,4,.15) 100%
+    );
+}
 
-                  <div class="body details">
-                    <p class="locked-line"><strong>Data:</strong> 31/10/2026, às 12h</p>
-                    <p class="locked-line"><strong>Local:</strong> Rua Primo Porcari, 51 - Medeiros/Jundiaí</p>
-                  </div>
 
-                  <div class="ornament small" aria-hidden="true">
-                    <span></span><b>♥</b><span></span>
-                  </div>
+/* Virada mais fluida: sem a "pontinha" e com aceleração/desaceleração progressivas */
+.book.turning .turning-page{
+  animation:classicFlip 1.08s cubic-bezier(.42,0,.18,1) forwards;
+}
+.book.turning .sweep-shadow{
+  animation:sweep 1.08s ease-in-out forwards;
+}
 
-                  <button id="turnPageButton" class="script primary-button p1-button" type="button">
-                    <span>Confirmar presença</span>
-                  </button>
-                </div>
+@keyframes classicFlip{
+  0%{
+    transform:rotateY(0deg) translateX(0) translateZ(0) scaleX(1);
+  }
+  12%{
+    transform:rotateY(-7deg) translateX(-.15%) translateZ(5px) scaleX(.998);
+  }
+  26%{
+    transform:rotateY(-25deg) translateX(-.35%) translateZ(16px) scaleX(.994);
+  }
+  42%{
+    transform:rotateY(-58deg) translateX(-.55%) translateZ(30px) scaleX(.988);
+  }
+  55%{
+    transform:rotateY(-91deg) translateX(-.65%) translateZ(38px) scaleX(.984);
+  }
+  69%{
+    transform:rotateY(-126deg) translateX(-.50%) translateZ(29px) scaleX(.988);
+  }
+  84%{
+    transform:rotateY(-158deg) translateX(-.25%) translateZ(13px) scaleX(.995);
+  }
+  94%{
+    transform:rotateY(-175deg) translateX(-.08%) translateZ(4px) scaleX(.999);
+  }
+  100%{
+    transform:rotateY(-180deg) translateX(0) translateZ(0) scaleX(1);
+  }
+}
 
-                <div class="sweep-shadow" aria-hidden="true"></div>
-              </div>
-            </div>
+@keyframes sweep{
+  0%{opacity:0}
+  16%{opacity:.10}
+  34%{opacity:.26}
+  52%{opacity:.48}
+  70%{opacity:.30}
+  86%{opacity:.12}
+  100%{opacity:0}
+}
 
-            <div class="page-face page-back" aria-hidden="true">
-              <div class="paper-back"></div>
-            </div>
+.book.open .turning-page{
+  transform:rotateY(-180deg);
+  pointer-events:none;
+}
 
-          </div>
-        </section>
+/* ============ PÁGINA 2 ============ */
 
-      </div>
-    </div>
-  </main>
+/*
+  Ela fica 100% renderizada desde o início e já aparece durante a própria virada.
+  Não há fade atrasado.
+*/
+.page-two{
+  z-index:1;
+  opacity:1;
+  visibility:visible;
+  pointer-events:none;
+}
+.book.open .page-two{pointer-events:auto}
 
-  <iframe id="submitFrame" name="submitFrame" src="about:blank" title="Envio da confirmação" hidden></iframe>
+.page-two-ui{
+  position:absolute;
+  z-index:6;
+  top:32.0%;
+  text-align:center;
+  color:var(--ink);
+}
 
-  <script src="script.js"></script>
-</body>
-</html>
+.p2-title{
+  margin:0;
+  color:var(--green);
+  font-size:clamp(2.85rem,6.2vh,4.35rem);
+  line-height:.76;
+  font-weight:400;
+}
+
+.p2-copy{
+  margin:1.05vh auto 2.0vh;
+  max-width:100%;
+  color:#3c4038;
+  font-size:clamp(.63rem,1.42vh,.86rem);
+  line-height:1.44;
+}
+
+#rsvpForm{
+  width:100%;
+  text-align:left;
+}
+
+.field-label{
+  display:block;
+  margin:0 0 .50vh;
+  padding-left:1.5%;
+  color:var(--green-dark);
+  font-size:clamp(.68rem,1.48vh,.88rem);
+  font-weight:700;
+}
+
+#guestName{
+  position:relative;
+  z-index:10;
+  width:100%;
+  height:5.05vh;
+  min-height:44px;
+  padding:0 4%;
+  border:2px solid #416334;
+  border-radius:10px;
+  outline:none;
+  background:rgba(255,250,239,.98);
+  color:#666;
+  font-family:"Poppins",sans-serif;
+  font-size:16px;
+  -webkit-appearance:none;
+  appearance:none;
+  touch-action:manipulation;
+}
+
+#guestName:focus{
+  box-shadow:0 0 0 3px rgba(65,99,52,.15);
+}
+
+.companion-label{
+  margin-top:1.0vh;
+}
+
+#companions{
+  position:relative;
+  z-index:10;
+  width:100%;
+  min-height:6.2vh;
+  padding:.85vh 4%;
+  border:2px solid #416334;
+  border-radius:10px;
+  outline:none;
+  resize:none;
+  background:rgba(255,250,239,.98);
+  color:#666;
+  font-family:"Poppins",sans-serif;
+  font-size:16px;
+  line-height:1.3;
+  -webkit-appearance:none;
+  appearance:none;
+  touch-action:manipulation;
+}
+
+#companions:focus{
+  box-shadow:0 0 0 3px rgba(65,99,52,.15);
+}
+
+.p2-confirm{
+  position:relative;
+  z-index:10;
+  width:100%;
+  min-height:5.1vh;
+  margin-top:1.45vh;
+  border-radius:999px;
+  padding:.40vh .8rem .65vh;
+  font-size:clamp(1.42rem,3.35vh,2.25rem);
+  line-height:.8;
+  touch-action:manipulation;
+}
+
+.status{
+  min-height:1.5vh;
+  margin:.55vh 0 0;
+  color:#8d2022;
+  text-align:center;
+  font-size:clamp(.60rem,1.25vh,.75rem);
+}
+
+.back-button{
+  position:relative;
+  z-index:10;
+  margin-top:0;
+  transform:translateY(-3.0vh);
+  padding:.45rem .9rem;
+  border:0;
+  background:transparent;
+  color:var(--green-dark);
+  font-size:clamp(.65rem,1.40vh,.82rem);
+  font-weight:600;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+
+/* ============ SUCESSO / OK ============ */
+
+.success-card{
+  position:absolute;
+  z-index:30;
+  left:4%;
+  right:4%;
+  top:4%;
+  padding:2.5vh 7% 2.1vh;
+  border:2px solid rgba(64,96,47,.62);
+  border-radius:14px;
+  background:rgba(255,248,232,.985);
+  box-shadow:0 8px 22px rgba(0,0,0,.16);
+  text-align:center;
+  color:var(--green-dark);
+}
+
+.success-card h2{
+  margin:0;
+  font-size:clamp(2.9rem,6.4vh,4.25rem);
+  line-height:.76;
+  font-weight:400;
+}
+
+.success-card p{
+  margin:.75vh 0 0;
+  font-size:clamp(.69rem,1.46vh,.87rem);
+}
+
+.success-card .success-last{
+  color:#942123;
+  font-size:clamp(1.38rem,3.25vh,2.15rem);
+  line-height:.85;
+}
+
+.ok-button{
+  margin-top:1.65vh;
+  min-width:38%;
+  padding:.48vh 1.55rem .72vh;
+  border:0;
+  border-radius:999px;
+  color:#fffdf7;
+  background:linear-gradient(#51753b,#385929);
+  box-shadow:0 6px 14px rgba(54,77,38,.22),inset 0 0 0 1px rgba(255,255,255,.12);
+  font-size:clamp(1.25rem,3.0vh,1.95rem);
+  line-height:.82;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+
+[hidden]{display:none!important}
+
+button:focus-visible,
+input:focus-visible{
+  outline:3px solid rgba(255,255,255,.8);
+  outline-offset:2px;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .book.turning .turning-page{animation-duration:.20s}
+  .book.turning .sweep-shadow{animation-duration:.20s}
+}
